@@ -3,6 +3,7 @@ import FeaturedWorks from "../FeaturedWorks/FeaturedWorks";
 import Hero from "../Hero/Hero";
 import HowItWorks from "../HowItWorks/HowItWorks";
 import PlatformStats from "../PlatformStats/PlatformStats";
+import Testimonials from "../Testimonials/Testimonials";
 import TopWorkers from "../TopWorkers/TopWorkers";
 import WhyChooseUs from "../WhyChooseUs/WhyChooseUs";
 
@@ -24,6 +25,9 @@ const Home = () => {
                 </section>
                 <section className="w-11/12 mx-auto">
                     <PlatformStats></PlatformStats>
+                </section>
+                <section className="w-11/12 mx-auto">
+                    <Testimonials></Testimonials>
                 </section>
                 <section className="w-11/12 mx-auto">
                     <Faqs></Faqs>
