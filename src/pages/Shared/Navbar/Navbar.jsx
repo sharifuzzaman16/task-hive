@@ -34,13 +34,13 @@ const Navbar = () => {
                             </div>
                         </div> : <ul className="flex gap-2 mr-4">
                             <li>
-                                <a className="link-hover cursor-pointer hover:text-bg-primary text-text-primary">Login</a>
+                                <Link to={'/login'} className="link-hover cursor-pointer hover:text-bg-primary text-text-primary">Login</Link>
                             </li>
                             <li>
                                 <a className="">/</a>
                             </li>
                             <li>
-                                <a className="link-hover cursor-pointer hover:text-bg-primary text-text-primary">Register</a>
+                                <Link to={'/register'} className="link-hover cursor-pointer hover:text-bg-primary text-text-primary">Register</Link>
                             </li>
                         </ul>
                     }
