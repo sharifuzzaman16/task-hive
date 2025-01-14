@@ -1,8 +1,22 @@
+import FeaturedWorks from "../FeaturedWorks/FeaturedWorks";
+import Hero from "../Hero/Hero";
+import TopWorkers from "../TopWorkers/TopWorkers";
+
 const Home = () => {
     return (
-        <div>
-            this is home
-        </div>
+        <>
+            <header className="bg-[#FFF4E6]">
+                <Hero></Hero>
+            </header>
+            <main className="w-11/12 mx-auto">
+                <section>
+                    <TopWorkers></TopWorkers>
+                </section>
+                <section>
+                    <FeaturedWorks></FeaturedWorks>
+                </section>
+            </main>
+        </>
     );
 };
 

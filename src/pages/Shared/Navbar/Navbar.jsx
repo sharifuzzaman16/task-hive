@@ -5,7 +5,7 @@ const Navbar = () => {
     const user = false;
 
     return (
-        <header className="bg-white border-b fixed w-full">
+        <header className="bg-white border-b z-50 fixed w-full">
             <div className="navbar w-11/12 mx-auto h-[75px]">
                 <div className="flex-1">
                     <Link to={'/'} className="text-xl font-bold text-text-primary">TaskHive</Link>
@@ -15,7 +15,7 @@ const Navbar = () => {
                     
                     {
                         user ? <div className="flex items-center gap-4">
-                            <a className="bg-[#FFF4E6] text-text-primary py-2.5 px-4 rounded-full shadow-sm">$ 400 Coin</a>
+                            <a className="bg-[#FFF4E6] text-text-primary py-2.5 px-4 rounded-full shadow">$ 400 Coin</a>
                             <div className="dropdown dropdown-end">
                                 <div tabIndex={0} role="button" className="btn btn-ghost btn-circle avatar">
                                     <div className="w-12 rounded-full">
