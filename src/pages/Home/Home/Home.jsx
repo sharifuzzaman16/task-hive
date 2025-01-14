@@ -1,5 +1,6 @@
 import FeaturedWorks from "../FeaturedWorks/FeaturedWorks";
 import Hero from "../Hero/Hero";
+import HowItWorks from "../HowItWorks/HowItWorks";
 import TopWorkers from "../TopWorkers/TopWorkers";
 
 const Home = () => {
@@ -14,6 +15,9 @@ const Home = () => {
                 </section>
                 <section>
                     <FeaturedWorks></FeaturedWorks>
+                </section>
+                <section>
+                    <HowItWorks></HowItWorks>
                 </section>
             </main>
         </>
