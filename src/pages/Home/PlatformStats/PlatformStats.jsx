@@ -6,7 +6,7 @@ import { FaCoins, FaMoneyBillWave, FaUsers } from 'react-icons/fa6';
 
 const PlatformStats = () => {
     return (
-        <div className="w-11/12 mx-auto text-center">
+        <div className="text-center">
             <SectionTitle heading={'Platform Statistics'} subHeading={'See our platform’s growth in numbers'}></SectionTitle>
             <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mt-10">
                 {[
@@ -15,7 +15,7 @@ const PlatformStats = () => {
                     { label: "Coins Earned", count: 32500, icon: <FaCoins /> },
                     { label: "Payouts Processed", count: 12400, icon: <FaMoneyBillWave /> },
                 ].map((stat, idx) => (
-                    <div key={idx} className="bg-gray-100 p-6 rounded-lg shadow-md flex flex-col justify-center items-center">
+                    <div key={idx} className="bg-white p-6 rounded-lg shadow-md flex flex-col justify-center items-center">
                         <h3 className="text-4xl font-bold text-bg-primary">
                             <CountUp end={stat.count} duration={3} />
                         </h3>
