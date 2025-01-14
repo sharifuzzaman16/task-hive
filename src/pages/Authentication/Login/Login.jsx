@@ -1,5 +1,6 @@
 import React from "react";
 import loginIllustrations from "../../../assets/Sign in-pana.svg";
+import { FcGoogle } from "react-icons/fc";
 
 const Login = () => {
     return (
@@ -22,7 +23,7 @@ const Login = () => {
                         <input
                             type="email"
                             id="email"
-                            className="w-full p-3 mt-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            className="w-full p-2.5 mt-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-bg-primary"
                             placeholder="Enter your email"
                             required
                         />
@@ -35,7 +36,7 @@ const Login = () => {
                         <input
                             type="password"
                             id="password"
-                            className="w-full p-3 mt-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            className="w-full p-2.5 mt-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-bg-primary"
                             placeholder="Enter your password"
                             required
                         />
@@ -43,11 +44,18 @@ const Login = () => {
 
                     <button
                         type="submit"
-                        className="w-full py-3 bg-bg-primary text-white text-lg font-semibold rounded-md"
+                        className="w-full py-2.5 bg-bg-primary text-white text-lg font-semibold rounded-md"
                     >
                         Login
                     </button>
                 </form>
+                <div className="flex justify-center my-4">
+                    <button
+                        className="w-full flex items-center justify-center gap-2 py-2.5 bg-red-500 text-white text-lg font-semibold rounded-md"
+                    >
+                        <FcGoogle className="text-xl"></FcGoogle>Sign in with Google
+                    </button>
+                </div>
 
                 <div className="text-center mt-4">
                     <p className="text-sm text-gray-600">
