@@ -1,3 +1,4 @@
+import Faqs from "../FAQS/Faqs";
 import FeaturedWorks from "../FeaturedWorks/FeaturedWorks";
 import Hero from "../Hero/Hero";
 import HowItWorks from "../HowItWorks/HowItWorks";
@@ -23,6 +24,9 @@ const Home = () => {
                 </section>
                 <section className="w-11/12 mx-auto">
                     <PlatformStats></PlatformStats>
+                </section>
+                <section className="w-11/12 mx-auto">
+                    <Faqs></Faqs>
                 </section>
                 <section className="bg-white">
                     <WhyChooseUs></WhyChooseUs>
