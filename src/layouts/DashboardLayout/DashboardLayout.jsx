@@ -8,7 +8,7 @@ import AdminHome from "../../pages/Dashboard/Admin/AdminHome/AdminHome";
 const DashboardLayout = () => {
     // Replace this with your actual authentication or context data
     const user = {
-        role: "buyer", // Example: "worker", "buyer", or "admin"
+        role: "admin", // Example: "worker", "buyer", or "admin"
     };
 
     // Determine which component to show based on the user's role
