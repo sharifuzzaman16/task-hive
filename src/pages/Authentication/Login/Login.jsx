@@ -7,22 +7,32 @@ import { useNavigate } from "react-router-dom";
 
 const Login = () => {
 
-    const {loginUser} = useContext(AuthContext);
+    const { loginUser, loginWithGoogle } = useContext(AuthContext);
     const navigate = useNavigate();
 
     const {
-            register,
-            handleSubmit,
-            reset,
-            formState: { errors },
-        } = useForm();
+        register,
+        handleSubmit,
+        reset,
+        formState: { errors },
+    } = useForm();
 
     const onSubmit = (data) => {
         loginUser(data.email, data.password)
+            .then(result => {
+                console.log(result.user)
+                navigate('/dashboard');
+                reset();
+            })
+            .catch(err => {
+                console.log(err.message)
+            })
+    }
+    const handleGoogleLogin = () => {
+        loginWithGoogle()
         .then(result => {
             console.log(result.user)
             navigate('/dashboard');
-            reset();
         })
         .catch(err => {
             console.log(err.message)
@@ -47,7 +57,7 @@ const Login = () => {
                             Email
                         </label>
                         <input
-                            {...register('email', {required: true})}
+                            {...register('email', { required: true })}
                             type="email"
                             id="email"
                             className="w-full p-2.5 mt-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-bg-primary"
@@ -61,7 +71,7 @@ const Login = () => {
                             Password
                         </label>
                         <input
-                            {...register('password', {required: true})}
+                            {...register('password', { required: true })}
                             type="password"
                             id="password"
                             className="w-full p-2.5 mt-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-bg-primary"
@@ -79,6 +89,7 @@ const Login = () => {
                 </form>
                 <div className="flex justify-center my-4">
                     <button
+                        onClick={handleGoogleLogin}
                         className="w-full flex items-center justify-center gap-2 py-2.5 bg-red-500 text-white text-lg font-semibold rounded-md"
                     >
                         <FcGoogle className="text-xl"></FcGoogle>Sign in with Google
