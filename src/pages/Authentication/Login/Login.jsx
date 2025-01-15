@@ -1,8 +1,34 @@
-import React from "react";
+import React, { useContext } from "react";
 import loginIllustrations from "../../../assets/Sign in-pana.svg";
 import { FcGoogle } from "react-icons/fc";
+import { useForm } from "react-hook-form";
+import { AuthContext } from "../../../context/AuthProvider";
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
+
+    const {loginUser} = useContext(AuthContext);
+    const navigate = useNavigate();
+
+    const {
+            register,
+            handleSubmit,
+            reset,
+            formState: { errors },
+        } = useForm();
+
+    const onSubmit = (data) => {
+        loginUser(data.email, data.password)
+        .then(result => {
+            console.log(result.user)
+            navigate('/dashboard');
+            reset();
+        })
+        .catch(err => {
+            console.log(err.message)
+        })
+    }
+
     return (
         <div className="flex bg-white w-4/5 h-[550px] mx-auto shadow-lg my-10">
             {/* Left side with image */}
@@ -15,12 +41,13 @@ const Login = () => {
                 <h2 className="text-3xl font-bold text-gray-800 mb-6">Welcome Back!</h2>
                 <p className="text-gray-600 mb-4">Please login to your account.</p>
 
-                <form>
+                <form onSubmit={handleSubmit(onSubmit)}>
                     <div className="mb-4">
                         <label className="block text-sm font-medium text-gray-700" htmlFor="email">
                             Email
                         </label>
                         <input
+                            {...register('email', {required: true})}
                             type="email"
                             id="email"
                             className="w-full p-2.5 mt-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-bg-primary"
@@ -34,6 +61,7 @@ const Login = () => {
                             Password
                         </label>
                         <input
+                            {...register('password', {required: true})}
                             type="password"
                             id="password"
                             className="w-full p-2.5 mt-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-bg-primary"
