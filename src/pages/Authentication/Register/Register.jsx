@@ -4,9 +4,11 @@ import { useForm } from "react-hook-form"
 import { AuthContext } from "../../../context/AuthProvider";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
+import useAxiosPublic from "../../../hooks/useAxiosPublic";
 
 const Register = () => {
 
+    const axiosPublic = useAxiosPublic();
     const { createUser, updateUserProfile } = useContext(AuthContext);
     const navigate = useNavigate();
 
@@ -22,15 +24,29 @@ const Register = () => {
             .then(result => {
                 updateUserProfile(data.name, data.photo)
                     .then(() => {
-                        Swal.fire({
-                            position: "center",
-                            icon: "success",
-                            title: "Registration successful!",
-                            showConfirmButton: false,
-                            timer: 1500
-                        });
-                        reset();
-                        navigate('/dashboard');
+                        const availableCoin = data.role === "buyer" ? 50 : 10;
+                        const userInfo = {
+                            name: data.name,
+                            email: data.email,
+                            photo: data.photo,
+                            role: data.role,
+                            availableCoin
+                        }
+                        axiosPublic.post('/users', userInfo)
+                            .then(res => {
+                                console.log(res.data)
+                                if (res.data.insertedId) {
+                                    Swal.fire({
+                                        position: "center",
+                                        icon: "success",
+                                        title: "Registration successful!",
+                                        showConfirmButton: false,
+                                        timer: 1500
+                                    });
+                                    reset();
+                                    navigate('/dashboard');
+                                }
+                            })
                     })
                     .catch(err => {
                         console.log(err.message)
