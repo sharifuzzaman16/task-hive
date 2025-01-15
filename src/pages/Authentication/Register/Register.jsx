@@ -1,7 +1,48 @@
-import React from "react";
+import React, { useContext } from "react";
 import registerIllustration from "../../../assets/Mobile login-cuate.svg";
+import { useForm } from "react-hook-form"
+import { AuthContext } from "../../../context/AuthProvider";
+import Swal from "sweetalert2";
+import { useNavigate } from "react-router-dom";
 
 const Register = () => {
+
+    const {createUser} = useContext(AuthContext);
+    const navigate = useNavigate();
+
+    const {
+        register,
+        handleSubmit,
+        reset,
+        formState: { errors },
+      } = useForm();
+
+    const onSubmit = (data) => {
+        createUser(data.email, data.password)
+        .then(result => {
+            Swal.fire({
+                position: "center",
+                icon: "success",
+                title: "Registration successful!",
+                showConfirmButton: false,
+                timer: 1500
+              });
+            reset();
+            navigate('/dashboard');
+        })
+        .catch(err => {
+            console.log(err.message)
+            Swal.fire({
+                position: "center",
+                icon: "error",
+                title: `${err.message}`,
+                showConfirmButton: false,
+                timer: 1500
+              });
+        })
+    }
+    
+
     return (
         <div className="flex bg-white w-4/5 h-[700px] mx-auto shadow-lg my-10">
             {/* Left side with image */}
@@ -14,13 +55,14 @@ const Register = () => {
                 <h2 className="text-3xl font-bold text-gray-800 mb-6">Create Your Account</h2>
                 <p className="text-gray-600 mb-4">Please fill in the details below to sign up.</p>
 
-                <form>
+                <form onSubmit={handleSubmit(onSubmit)}>
                     {/* Full Name */}
                     <div className="mb-4">
                         <label className="block text-sm font-medium text-gray-700" htmlFor="full-name">
                             Full Name
                         </label>
                         <input
+                            {...register('name', {required: true})}
                             type="text"
                             id="full-name"
                             className="w-full p-2.5 mt-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-bg-primary"
@@ -35,6 +77,7 @@ const Register = () => {
                             Email
                         </label>
                         <input
+                            {...register('email', {required: true})}
                             type="email"
                             id="email"
                             className="w-full p-2.5 mt-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-bg-primary"
@@ -49,6 +92,7 @@ const Register = () => {
                             Role
                         </label>
                         <select
+                            {...register('role', {required: true})}
                             id="role"
                             className="w-full p-2.5 mt-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-bg-primary"
                             required
@@ -65,6 +109,7 @@ const Register = () => {
                             Photo URL
                         </label>
                         <input
+                        {...register('photo-url', {required: true})}
                             type="url"
                             id="photo-url"
                             className="w-full p-2.5 mt-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-bg-primary"
@@ -79,6 +124,7 @@ const Register = () => {
                             Password
                         </label>
                         <input
+                        {...register('password', {required: true})}
                             type="password"
                             id="password"
                             className="w-full p-2.5 mt-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-bg-primary"

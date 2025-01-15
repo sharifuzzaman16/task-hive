@@ -1,8 +1,10 @@
+import { useContext } from "react";
 import { Link } from "react-router-dom";
+import { AuthContext } from "../../../context/AuthProvider";
 
 const Navbar = () => {
 
-    const user = true;
+    const {user} = useContext(AuthContext);
 
     return (
         <header className="bg-white border-b z-50 fixed w-full">
@@ -20,7 +22,7 @@ const Navbar = () => {
                                 <div tabIndex={0} role="button" className="btn btn-ghost btn-circle avatar">
                                     <div className="w-12 rounded-full">
                                         <img
-                                            alt="Tailwind CSS Navbar component"
+                                            alt=""
                                             src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp" />
                                     </div>
                                 </div>
