@@ -16,19 +16,19 @@ const DashboardSidebar = () => {
 
     const navigationConfig = {
         worker: [
-            { to: "/dashboard", label: "Home", icon: <FaHouse /> },
+            { to: "/dashboard/worker-home", label: "Home", icon: <FaHouse /> },
             { to: "/dashboard/tasks", label: "Tasks List", icon: <FaTasks /> },
             { to: "/dashboard/submissions", label: "My Submissions", icon: <MdSubject /> },
             { to: "/dashboard/withdrawals", label: "Withdrawals", icon: <BiMoneyWithdraw /> },
         ],
         buyer: [
-            { to: "/dashboard", label: "Home", icon: <FaHouse /> },
-            { to: "/dashboard/tasks", label: "Add New Tasks", icon: <FaTasks /> },
+            { to: "/dashboard/buyer-home", label: "Home", icon: <FaHouse /> },
+            { to: "/dashboard/add-tasks", label: "Add New Tasks", icon: <FaTasks /> },
             { to: "/dashboard/my-tasks", label: "My Tasks", icon: <MdSubject /> },
             { to: "/dashboard/purchase", label: "Purchase Coin", icon: <FaDollarSign /> },
         ],
         admin: [
-            { to: "/dashboard", label: "Home", icon: <FaHouse /> },
+            { to: "/dashboard/admin-home", label: "Home", icon: <FaHouse /> },
             { to: "/dashboard/manage-users", label: "Manage Users", icon: <FaUsers /> },
             { to: "/dashboard/manage-tasks", label: "Manage Tasks", icon: <FaTasks /> },
             { to: "/dashboard/settings", label: "Settings", icon: <FaCog /> },
