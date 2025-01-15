@@ -4,7 +4,7 @@ import { AuthContext } from "../../../context/AuthProvider";
 
 const Navbar = () => {
 
-    const {user} = useContext(AuthContext);
+    const {user, logOut} = useContext(AuthContext);
 
     return (
         <header className="bg-white border-b z-50 fixed w-full">
@@ -22,8 +22,8 @@ const Navbar = () => {
                                 <div tabIndex={0} role="button" className="btn btn-ghost btn-circle avatar">
                                     <div className="w-12 rounded-full">
                                         <img
-                                            alt=""
-                                            src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp" />
+                                            alt={user.displayName}
+                                            src={user.photoURL} />
                                     </div>
                                 </div>
                                 <ul
@@ -31,7 +31,7 @@ const Navbar = () => {
                                     className="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow">
                                     <li><Link to={'/dashboard'}>Dashboard</Link></li>
                                     <li><a>Settings</a></li>
-                                    <li><a>Logout</a></li>
+                                    <li><a onClick={logOut}>Logout</a></li>
                                 </ul>
                             </div>
                         </div> : <ul className="flex gap-2 mr-4">

@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 
 const Register = () => {
 
-    const {createUser} = useContext(AuthContext);
+    const { createUser, updateUserProfile } = useContext(AuthContext);
     const navigate = useNavigate();
 
     const {
@@ -15,33 +15,46 @@ const Register = () => {
         handleSubmit,
         reset,
         formState: { errors },
-      } = useForm();
+    } = useForm();
 
     const onSubmit = (data) => {
         createUser(data.email, data.password)
-        .then(result => {
-            Swal.fire({
-                position: "center",
-                icon: "success",
-                title: "Registration successful!",
-                showConfirmButton: false,
-                timer: 1500
-              });
-            reset();
-            navigate('/dashboard');
-        })
-        .catch(err => {
-            console.log(err.message)
-            Swal.fire({
-                position: "center",
-                icon: "error",
-                title: `${err.message}`,
-                showConfirmButton: false,
-                timer: 1500
-              });
-        })
+            .then(result => {
+                updateUserProfile(data.name, data.photo)
+                    .then(() => {
+                        Swal.fire({
+                            position: "center",
+                            icon: "success",
+                            title: "Registration successful!",
+                            showConfirmButton: false,
+                            timer: 1500
+                        });
+                        reset();
+                        navigate('/dashboard');
+                    })
+                    .catch(err => {
+                        console.log(err.message)
+                        Swal.fire({
+                            position: "center",
+                            icon: "error",
+                            title: `${err.message}`,
+                            showConfirmButton: false,
+                            timer: 1500
+                        });
+                    })
+            })
+            .catch(err => {
+                console.log(err.message)
+                Swal.fire({
+                    position: "center",
+                    icon: "error",
+                    title: `${err.message}`,
+                    showConfirmButton: false,
+                    timer: 1500
+                });
+            })
     }
-    
+
 
     return (
         <div className="flex bg-white w-4/5 h-[700px] mx-auto shadow-lg my-10">
@@ -62,7 +75,7 @@ const Register = () => {
                             Full Name
                         </label>
                         <input
-                            {...register('name', {required: true})}
+                            {...register('name', { required: true })}
                             type="text"
                             id="full-name"
                             className="w-full p-2.5 mt-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-bg-primary"
@@ -77,7 +90,7 @@ const Register = () => {
                             Email
                         </label>
                         <input
-                            {...register('email', {required: true})}
+                            {...register('email', { required: true })}
                             type="email"
                             id="email"
                             className="w-full p-2.5 mt-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-bg-primary"
@@ -92,7 +105,7 @@ const Register = () => {
                             Role
                         </label>
                         <select
-                            {...register('role', {required: true})}
+                            {...register('role', { required: true })}
                             id="role"
                             className="w-full p-2.5 mt-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-bg-primary"
                             required
@@ -109,7 +122,7 @@ const Register = () => {
                             Photo URL
                         </label>
                         <input
-                        {...register('photo-url', {required: true})}
+                            {...register('photo', { required: true })}
                             type="url"
                             id="photo-url"
                             className="w-full p-2.5 mt-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-bg-primary"
@@ -124,7 +137,7 @@ const Register = () => {
                             Password
                         </label>
                         <input
-                        {...register('password', {required: true})}
+                            {...register('password', { required: true })}
                             type="password"
                             id="password"
                             className="w-full p-2.5 mt-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-bg-primary"
@@ -133,7 +146,7 @@ const Register = () => {
                         />
                     </div>
 
-                    
+
 
                     {/* Register Button */}
                     <button
