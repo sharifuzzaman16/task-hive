@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 
 const Navbar = () => {
 
-    const user = false;
+    const user = true;
 
     return (
         <header className="bg-white border-b z-50 fixed w-full">
@@ -15,7 +15,7 @@ const Navbar = () => {
 
                     {
                         user ? <div className="flex items-center gap-4">
-                            <a className="bg-[#FFF4E6] text-text-primary py-2.5 px-4 rounded-full shadow">$ 400 Coin</a>
+                            <a className="bg-[#FFF4E6] text-text-primary py-2.5 px-4 rounded-full">$ 400 Coin</a>
                             <div className="dropdown dropdown-end">
                                 <div tabIndex={0} role="button" className="btn btn-ghost btn-circle avatar">
                                     <div className="w-12 rounded-full">
@@ -27,7 +27,7 @@ const Navbar = () => {
                                 <ul
                                     tabIndex={0}
                                     className="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow">
-                                    <li><a>Dashboard</a></li>
+                                    <li><Link to={'/dashboard'}>Dashboard</Link></li>
                                     <li><a>Settings</a></li>
                                     <li><a>Logout</a></li>
                                 </ul>
