@@ -4,11 +4,13 @@ import { FcGoogle } from "react-icons/fc";
 import { useForm } from "react-hook-form";
 import { AuthContext } from "../../../context/AuthProvider";
 import { useNavigate } from "react-router-dom";
+import useAxiosPublic from "../../../hooks/useAxiosPublic";
 
 const Login = () => {
 
     const { loginUser, loginWithGoogle } = useContext(AuthContext);
     const navigate = useNavigate();
+    const axiosPublic = useAxiosPublic();
 
     const {
         register,
@@ -30,13 +32,29 @@ const Login = () => {
     }
     const handleGoogleLogin = () => {
         loginWithGoogle()
-        .then(result => {
-            console.log(result.user)
-            navigate('/dashboard');
-        })
-        .catch(err => {
-            console.log(err.message)
-        })
+            .then(result => {
+                console.log(result.user)
+                const userInfo = {
+                    name: result.user.displayName,
+                    email: result.user.email,
+                    photo: result.user.photoURL,
+                    role: 'worker',
+                    availableCoin: 10,
+                }
+                axiosPublic.post('/users', userInfo)
+                    .then(res => {
+                        console.log(res.data)
+                        if (res.data.insertedId) {
+                            navigate('/dashboard');
+                        }
+                    })
+                    .catch(err => {
+                        console.log(err.message)
+                    })
+            })
+            .catch(err => {
+                console.log(err.message)
+            })
     }
 
     return (
