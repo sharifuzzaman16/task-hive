@@ -1,9 +1,9 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { BiMoneyWithdraw } from "react-icons/bi";
-import { MdSubject } from "react-icons/md";
-import { FaDollarSign, FaHouse, FaUsers } from "react-icons/fa6";
-import { FaCog, FaTasks } from "react-icons/fa";
+import { MdPayment, MdSubject } from "react-icons/md";
+import { FaHouse, FaUsers } from "react-icons/fa6";
+import { FaCog, FaHistory, FaTasks } from "react-icons/fa";
 import useUser from "../../../../hooks/useUser";
 
 const DashboardSidebar = () => {
@@ -20,7 +20,8 @@ const DashboardSidebar = () => {
             { to: "/dashboard/buyer-home", label: "Home", icon: <FaHouse /> },
             { to: "/dashboard/add-tasks", label: "Add New Tasks", icon: <FaTasks /> },
             { to: "/dashboard/my-tasks", label: "My Tasks", icon: <MdSubject /> },
-            { to: "/dashboard/purchase", label: "Purchase Coin", icon: <FaDollarSign /> },
+            { to: "/dashboard/purchase", label: "Purchase Coin", icon: <MdPayment /> },
+            { to: "/dashboard/payment-history", label: "Payment History", icon: <FaHistory /> },
         ],
         admin: [
             { to: "/dashboard/admin-home", label: "Home", icon: <FaHouse /> },

@@ -8,7 +8,6 @@ const useUser = () => {
     const { user: firebaseUser } = useContext(AuthContext);
     const axiosPublic = useAxiosPublic();
     const userEmail = firebaseUser?.email;
-    console.log(userEmail)
 
     const { refetch, data: user = {} } = useQuery({
         queryKey: ['user', userEmail],
