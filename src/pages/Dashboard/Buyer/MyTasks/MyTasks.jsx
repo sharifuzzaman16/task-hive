@@ -1,25 +1,83 @@
-import { useQuery } from "@tanstack/react-query";
-import React, { useContext } from "react";
+import { useQuery, useMutation } from "@tanstack/react-query";
+import React, { useContext, useState } from "react";
 import { FaRegEdit } from "react-icons/fa";
 import { FaTrash } from "react-icons/fa6";
 import useAxiosPublic from "../../../../hooks/useAxiosPublic";
 import { AuthContext } from "../../../../context/AuthProvider";
+import { useForm } from "react-hook-form";
+import Swal from "sweetalert2";
 
 const MyTasks = () => {
-
   const axiosPublic = useAxiosPublic();
-  const {user} = useContext(AuthContext);
+  const { user } = useContext(AuthContext);
   const userEmail = user?.email;
-  
-  const {refetch, data: myTasks = []} = useQuery({
+
+  const { refetch, data: myTasks = [] } = useQuery({
     queryKey: ['myTasks', userEmail],
     queryFn: async () => {
       const res = await axiosPublic.get(`/my-tasks?email=${userEmail}`);
       return res.data;
     },
     enabled: !!userEmail
-  }) 
-  console.log(myTasks);
+  });
+
+  const { register, handleSubmit, reset, formState: { errors } } = useForm();
+
+  // State to store the selected task
+  const [selectedTask, setSelectedTask] = useState(null);
+
+  // Mutation to update the task
+  const { mutate } = useMutation({
+    mutationFn: async (updatedTask) => {
+      const res = await axiosPublic.patch(`/tasks/${selectedTask._id}`, updatedTask);
+      return res.data;
+    },
+    onSuccess: () => {
+      // Show a success alert
+      Swal.fire({
+        position: "center",
+        icon: "success",
+        title: "Task updated successfully!",
+        showConfirmButton: false,
+        timer: 1500
+      });
+      // Refetch the tasks after the update is successful
+      refetch();
+      // Close the modal
+      document.getElementById('my_modal_3').close();
+    },
+    onError: (err) => {
+      Swal.fire({
+        position: "center",
+        icon: "error",
+        title: `${err.message}`,
+        showConfirmButton: false,
+        timer: 1500
+      });
+    }
+  });
+
+  const onSubmit = (data) => {
+    const updatedTask = {
+      task_title: data.title,
+      task_detail: data.details,
+      submission_info: data.submissionInfo,
+    };
+
+    mutate(updatedTask); // Trigger the mutation to update the task
+  };
+
+  // Open modal and set selected task data
+  const openModal = (task) => {
+    setSelectedTask(task);
+    // Reset the form before opening the modal
+    reset({
+      title: task.task_title,
+      details: task.task_detail,
+      submissionInfo: task.submission_info,
+    });
+    document.getElementById('my_modal_3').showModal();
+  };
 
   return (
     <div>
@@ -39,14 +97,75 @@ const MyTasks = () => {
                 <td className="px-4 py-2">{task.task_title}</td>
                 <td className="px-4 py-2">{task.completion_date}</td>
                 <td className="px-4 py-2 flex gap-2 items-center">
-                    <FaRegEdit className="text-2xl text-success-green"></FaRegEdit>
-                    <FaTrash className="text-2xl text-error-red"></FaTrash>
+                  <FaRegEdit
+                    onClick={() => openModal(task)}  // Set the selected task
+                    className="text-2xl text-success-green cursor-pointer"
+                  />
+                  <FaTrash className="text-2xl text-error-red" />
                 </td>
               </tr>
             ))}
           </tbody>
         </table>
       </div>
+
+      {/* Modal */}
+      <dialog id="my_modal_3" className="modal">
+        <div className="modal-box">
+          <form method="dialog">
+            <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
+          </form>
+          <form onSubmit={handleSubmit(onSubmit)}>
+            <div className="mb-4">
+              <label className="block text-sm font-medium text-gray-700" htmlFor="task-title">
+                Task Title
+              </label>
+              <input
+                {...register('title', { required: true })}
+                type="text"
+                id="task-title"
+                className="w-full p-2.5 mt-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-bg-primary"
+                placeholder="Task Title"
+                required
+              />
+            </div>
+
+            <div className="mb-4">
+              <label className="block text-sm font-medium text-gray-700" htmlFor="task-details">
+                Task Details
+              </label>
+              <textarea
+                {...register('details', { required: true })}
+                id="task-details"
+                className="w-full p-2.5 mt-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-bg-primary"
+                placeholder="Task Details"
+                required
+              />
+            </div>
+
+            <div className="mb-4">
+              <label className="block text-sm font-medium text-gray-700" htmlFor="submission-info">
+                Submission Info
+              </label>
+              <textarea
+                {...register('submissionInfo', { required: true })}
+                id="submission-info"
+                className="w-full p-2.5 mt-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-bg-primary"
+                placeholder="Submission Info"
+                required
+              />
+            </div>
+
+            {/* Register Button */}
+            <button
+              type="submit"
+              className="w-full py-2.5 bg-bg-primary text-white text-lg font-semibold rounded-md"
+            >
+              Update Task
+            </button>
+          </form>
+        </div>
+      </dialog>
     </div>
   );
 };
