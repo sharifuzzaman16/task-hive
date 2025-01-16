@@ -1,8 +1,9 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 const TaskCard = ({task}) => {
 
-    const {task_image_url, payable_amount, required_workers, task_detail, task_title} = task;
+    const {task_image_url, payable_amount, required_workers, task_detail, task_title, _id} = task;
 
     return (
         <div className='w-[300px] h-[410px] bg-white shadow rounded-lg relative'>
@@ -13,7 +14,7 @@ const TaskCard = ({task}) => {
             </div>
             <div className='h-[50px] p-4 flex items-center justify-between'>
                 <p className='badge text-lg bg-[#FFF4E6]'>$ {payable_amount} Coins</p>
-                <button className='bg-bg-primary px-6 py-2 rounded-lg text-white'>Details</button>
+                <Link to={`/dashboard/tasks/details/${_id}`} className='bg-bg-primary px-6 py-2 rounded-lg text-white'>Details</Link>
             </div>
             <div className='absolute top-0 right-0 m-4 px-4 bg-[#FFF4E6] text-text-primary rounded-full shadow'>{required_workers}</div>
         </div>

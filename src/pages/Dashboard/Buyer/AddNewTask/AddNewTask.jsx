@@ -44,12 +44,13 @@ const AddNewTask = () => {
       const taskInfo = {
         task_title: data.title,
         task_detail: data.details,
-        required_workers: data.requiredWorkers,
-        payable_amount: data.payableAmount,
+        required_workers: parseInt(data.requiredWorkers),
+        payable_amount: parseInt(data.payableAmount),
         completion_date: data.completionDate,
         submission_info: data.submissionInfo,
         task_image_url: data.photo,
-        user_email: user.email,
+        buyer_email: user.email,
+        buyer_name: user.name,
 
       }
 
