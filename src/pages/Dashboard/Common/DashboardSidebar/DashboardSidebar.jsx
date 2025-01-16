@@ -4,15 +4,10 @@ import { BiMoneyWithdraw } from "react-icons/bi";
 import { MdSubject } from "react-icons/md";
 import { FaDollarSign, FaHouse, FaUsers } from "react-icons/fa6";
 import { FaCog, FaTasks } from "react-icons/fa";
+import useUser from "../../../../hooks/useUser";
 
 const DashboardSidebar = () => {
-    const user = {
-        name: "John Doe",
-        role: "worker", // Can be 'worker', 'buyer', or 'admin'
-        email: "johndoe@example.com",
-        totalTasks: 12,
-        totalEarnings: 50,
-    };
+    const [user] = useUser();
 
     const navigationConfig = {
         worker: [
