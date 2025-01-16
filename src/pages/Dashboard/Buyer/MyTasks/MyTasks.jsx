@@ -79,6 +79,51 @@ const MyTasks = () => {
     document.getElementById('my_modal_3').showModal();
   };
 
+  const { mutate: deleteTask } = useMutation({
+    mutationFn: async (taskId) => {
+      const res = await axiosPublic.delete(`/tasks/${taskId}`)
+      return res.data
+    },
+    onSuccess: () => {
+      Swal.fire({
+        position: "center",
+        icon: "success",
+        title: "Task deleted successfully!",
+        showConfirmButton: false,
+        timer: 1500
+      });
+      // Refetch tasks to update the list
+      refetch();
+    },
+    onError: (err) => {
+      // Show error message
+      Swal.fire({
+        position: "center",
+        icon: "error",
+        title: `${err.message}`,
+        showConfirmButton: false,
+        timer: 1500
+      });
+    }
+  })
+
+  const handleDelete = (taskId) => {
+    // Confirm delete before making the mutation
+    Swal.fire({
+      title: 'Are you sure?',
+      text: "You won't be able to undo this!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Yes, delete it!',
+      confirmButtonColor: '#ff8c42',
+      cancelButtonText: 'No, cancel!'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        deleteTask(taskId);  // Call the mutation to delete the task
+      }
+    });
+  };
+
   return (
     <div>
       <h1 className="text-2xl font-bold mb-4">My Tasks</h1>
@@ -101,7 +146,7 @@ const MyTasks = () => {
                     onClick={() => openModal(task)}  // Set the selected task
                     className="text-2xl text-success-green cursor-pointer"
                   />
-                  <FaTrash className="text-2xl text-error-red" />
+                  <FaTrash onClick={() => handleDelete(task._id)} className="text-2xl text-error-red cursor-pointer" />
                 </td>
               </tr>
             ))}

@@ -15,6 +15,7 @@ import AddNewTask from "../pages/Dashboard/Buyer/AddNewTask/AddNewTask";
 import MyTasks from "../pages/Dashboard/Buyer/MyTasks/MyTasks";
 import PurchaseCoin from "../pages/Dashboard/Buyer/PurchaseCoin/PurchaseCoin";
 import BuyerHome from "../pages/Dashboard/Buyer/BuyerHome/BuyerHome";
+import Payment from "../pages/Dashboard/Buyer/PurchaseCoin/Payment/Payment";
 
 
 const router = createBrowserRouter([
@@ -71,6 +72,10 @@ const router = createBrowserRouter([
       {
         path: "/dashboard/purchase",
         element: <PurchaseCoin></PurchaseCoin>
+      },
+      {
+        path: "/dashboard/payment",
+        element: <Payment></Payment>
       },
       {
         path: "/dashboard/admin-home",
