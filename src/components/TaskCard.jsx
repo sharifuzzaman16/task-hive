@@ -5,7 +5,7 @@ const TaskCard = ({task}) => {
     const {task_image_url, payable_amount, required_workers, task_detail, task_title} = task;
 
     return (
-        <div className='w-80 h-[410px] bg-white shadow rounded-lg relative'>
+        <div className='w-[300px] h-[410px] bg-white shadow rounded-lg relative'>
             <img className='rounded-t-lg h-[200px] w-full object-fill' src={task_image_url} alt="" />
             <div className='p-4 h-[150px]'>
                 <h2 className='text-xl font-semibold text-text-primary'>{task_title}</h2>
