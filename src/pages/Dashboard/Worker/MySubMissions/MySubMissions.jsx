@@ -1,10 +1,23 @@
-import React from "react";
+import { useQuery } from "@tanstack/react-query";
+import React, { useContext } from "react";
+import { AuthContext } from "../../../../context/AuthProvider";
+import useAxiosPublic from "../../../../hooks/useAxiosPublic";
 
 const MySubMissions = () => {
-  const submissions = [
-    { id: 1, task: "Logo Design", date: "2025-01-10", status: "Approved" },
-    { id: 2, task: "Website Development", date: "2025-01-12", status: "Pending" },
-  ];
+
+  const {user} = useContext(AuthContext);
+  const axiosPublic = useAxiosPublic();
+  const userEmail = user?.email;
+  
+  const {data: submissions = [] } = useQuery({
+    queryKey: ['submission', userEmail],
+    queryFn: async () => {
+      const res = await axiosPublic.get(`/submissions?email=${userEmail}`)
+      return res.data
+    },
+    enabled: !!userEmail
+  })
+
 
   return (
     <div>
@@ -14,15 +27,17 @@ const MySubMissions = () => {
           <thead className="bg-gray-100">
             <tr>
               <th className="text-left px-4 py-2">Task</th>
-              <th className="text-left px-4 py-2">Submission Date</th>
+              <th className="text-left px-4 py-2">Buyer Email</th>
+              <th className="text-left px-4 py-2">Payable Amount</th>
               <th className="text-left px-4 py-2">Status</th>
             </tr>
           </thead>
           <tbody>
             {submissions.map((submission) => (
-              <tr key={submission.id} className="border-t">
-                <td className="px-4 py-2">{submission.task}</td>
-                <td className="px-4 py-2">{submission.date}</td>
+              <tr key={submission._id} className="border-t">
+                <td className="px-4 py-2">{submission.task_title}</td>
+                <td className="px-4 py-2">{submission.buyer_email}</td>
+                <td className="px-4 py-2">$ {submission.payable_amount}</td>
                 <td className="px-4 py-2">{submission.status}</td>
               </tr>
             ))}
