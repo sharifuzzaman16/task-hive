@@ -7,19 +7,18 @@ import Swal from "sweetalert2";
 const ManageUsers = () => {
   const axiosPublic = useAxiosPublic();
 
-
   const { refetch, data: users = [] } = useQuery({
-    queryKey: ['users'],
+    queryKey: ["users"],
     queryFn: async () => {
-      const res = await axiosPublic.get('/users')
+      const res = await axiosPublic.get("/users");
       return res.data;
-    }
-  })
+    },
+  });
 
-  const { mutate: deleteTask } = useMutation({
+  const { mutate: deleteUser } = useMutation({
     mutationFn: async (userId) => {
-      const res = await axiosPublic.delete(`/users/${userId}`)
-      return res.data
+      const res = await axiosPublic.delete(`/users/${userId}`);
+      return res.data;
     },
     onSuccess: () => {
       Swal.fire({
@@ -27,76 +26,125 @@ const ManageUsers = () => {
         icon: "success",
         title: "User deleted successfully!",
         showConfirmButton: false,
-        timer: 1500
+        timer: 1500,
       });
-      // Refetch users to update the list
       refetch();
     },
     onError: (err) => {
-      // Show error message
       Swal.fire({
         position: "center",
         icon: "error",
-        title: `${err.message}`,
+        title: `${err.response?.data?.message || err.message}`,
         showConfirmButton: false,
-        timer: 1500
+        timer: 1500,
       });
-    }
-  })
+    },
+  });
+
+  const { mutate: updateUser } = useMutation({
+    mutationFn: async ({ userId, role }) => {
+      const res = await axiosPublic.patch(`/users/${userId}`, { role });
+      return res.data;
+    },
+    onSuccess: (_, { role }) => {
+      Swal.fire({
+        position: "center",
+        icon: "success",
+        title: `User role updated to ${role}!`,
+        showConfirmButton: false,
+        timer: 1500,
+      });
+      refetch();
+    },
+    onError: (err) => {
+      Swal.fire({
+        position: "center",
+        icon: "error",
+        title: `${err.response?.data?.message || err.message}`,
+        showConfirmButton: false,
+        timer: 1500,
+      });
+    },
+  });
+
+  const handleUpdate = (userId, role) => {
+    updateUser({ userId, role });
+  };
 
   const handleDelete = (userId) => {
-    // Confirm delete before making the mutation
     Swal.fire({
-      title: 'Are you sure?',
+      title: "Are you sure?",
       text: "You won't be able to undo this!",
-      icon: 'warning',
+      icon: "warning",
       showCancelButton: true,
-      confirmButtonText: 'Yes, delete it!',
-      confirmButtonColor: '#ff8c42',
-      cancelButtonText: 'No, cancel!'
+      confirmButtonText: "Yes, delete it!",
+      confirmButtonColor: "#ff8c42",
+      cancelButtonText: "No, cancel!",
     }).then((result) => {
       if (result.isConfirmed) {
-        deleteTask(userId);  // Call the mutation to delete the task
+        deleteUser(userId);
       }
     });
   };
 
+  const roles = ["admin", "buyer", "worker"];
+
   return (
     <div>
-      <h1 className="text-2xl font-bold mb-4">Manage Users{users.length}</h1>
+      <h1 className="text-2xl font-bold mb-4">
+        Manage Users ({users.length})
+      </h1>
       <div className="overflow-x-auto">
         <table className="table">
-          {/* head */}
           <thead>
             <tr>
               <th>Name</th>
               <th>Coin</th>
-              <th>Role</th>
+              <th className="text-center">Role</th>
               <th>Action</th>
             </tr>
           </thead>
           <tbody>
-            {users.map(user => <tr key={user._id}>
-              <td>
-                <div className="flex items-center gap-3">
-                  <div className="avatar">
-                    <div className="mask mask-squircle h-12 w-12">
-                      <img
-                        src={user.photo}
-                        alt="" />
+            {users.map((user) => (
+              <tr key={user._id}>
+                <td>
+                  <div className="flex items-center gap-3">
+                    <div className="avatar">
+                      <div className="mask mask-squircle h-12 w-12">
+                        <img src={user.photo} alt="" />
+                      </div>
+                    </div>
+                    <div>
+                      <div className="font-bold">{user.name}</div>
+                      <div className="text-sm opacity-50">{user.email}</div>
                     </div>
                   </div>
-                  <div>
-                    <div className="font-bold">{user.name}</div>
-                    <div className="text-sm opacity-50">{user.email}</div>
-                  </div>
-                </div>
-              </td>
-              <td>$ {user.availableCoin}</td>
-              <td>Purple</td>
-              <td className="px-4 py-2"><FaTrash
-                onClick={() => handleDelete(user._id)} className="text-2xl text-error-red cursor-pointer"></FaTrash></td>
-            </tr>)}
+                </td>
+                <td>$ {user.availableCoin}</td>
+                <td className="flex items-center justify-center">
+                  <select
+                    onChange={(e) => handleUpdate(user._id, e.target.value)}
+                    defaultValue={user.role}
+                    className="select select-ghost"
+                  >
+                    <option value="" disabled>
+                      Role
+                    </option>
+                    {roles.map((role) => (
+                      <option key={role} value={role}>
+                        {role.charAt(0).toUpperCase() + role.slice(1)}
+                      </option>
+                    ))}
+                  </select>
+                </td>
+                <td className="px-4 py-2">
+                  <FaTrash
+                    onClick={() => handleDelete(user._id)}
+                    className="text-2xl text-error-red cursor-pointer"
+                  />
+                </td>
+              </tr>
+            ))}
           </tbody>
         </table>
       </div>
