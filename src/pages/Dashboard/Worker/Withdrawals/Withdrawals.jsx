@@ -6,7 +6,7 @@ import Swal from "sweetalert2";
 const Withdrawals = () => {
   const axiosPublic = useAxiosPublic();
   const [user] = useUser();
-  const totalCoins = 400; // Example static value
+  const totalCoins = user.availableCoin;
   const paymentSystems = ["Bkash", "Rocket", "Nagad", "Other"];
   const [withdrawalAmount, setWithdrawalAmount] = useState(0);
   const [accountNumber, setAccountNumber] = useState("");
@@ -76,89 +76,92 @@ const Withdrawals = () => {
     !accountNumber;
 
   return (
-    <div className="p-6 max-w-lg mx-auto bg-white rounded-lg shadow-md">
-      <h2 className="text-2xl font-bold text-gray-800 mb-4">Withdraw Funds</h2>
+    <div>
+      <h1 className="text-2xl font-bold mb-4">My Submissions</h1>
+      <div className="p-6 max-w-lg mx-auto bg-white rounded-lg shadow-md">
+        <h2 className="text-2xl font-bold text-gray-800 mb-4">Withdraw Funds</h2>
 
-      <p className="mb-4 text-gray-600">
-        Total Coins: <span className="font-bold">{totalCoins}</span>
-        &nbsp;| Withdrawal Amount:{" "}
-        <span className="font-bold">${(totalCoins / 20).toFixed(2)}</span>
-      </p>
+        <p className="mb-4 text-gray-600">
+          Total Coins: <span className="font-bold">{totalCoins}</span>
+          &nbsp;| Withdrawal Amount:{" "}
+          <span className="font-bold">${(totalCoins / 20).toFixed(2)}</span>
+        </p>
 
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <div>
-          <label htmlFor="coinToWithdraw" className="block font-medium text-gray-700">
-            Coins to Withdraw (Min: 200 {totalCoins > 200 && `, Max: ${totalCoins}`})
-          </label>
-          <input
-            name="withdrawal_coin"
-            type="number"
-            id="coinToWithdraw"
-            required
-            onChange={handleCoinsChange}
-            className="w-full mt-1 p-2 border rounded-md focus:ring focus:ring-blue-200"
-          />
-          {error && <p className="text-red-500 text-sm mt-1">{error}</p>}
-        </div>
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div>
+            <label htmlFor="coinToWithdraw" className="block font-medium text-gray-700">
+              Coins to Withdraw (Min: 200 {totalCoins > 200 && `, Max: ${totalCoins}`})
+            </label>
+            <input
+              name="withdrawal_coin"
+              type="number"
+              id="coinToWithdraw"
+              required
+              onChange={handleCoinsChange}
+              className="w-full mt-1 p-2 border rounded-md focus:ring focus:ring-blue-200"
+            />
+            {error && <p className="text-red-500 text-sm mt-1">{error}</p>}
+          </div>
 
-        <div>
-          <label htmlFor="withdrawAmount" className="block font-medium text-gray-700">
-            Withdrawal Amount ($)
-          </label>
-          <input
-            name="withdrawal_amount"
-            type="number"
-            id="withdrawAmount"
-            value={withdrawalAmount}
-            readOnly
-            className="w-full mt-1 p-2 border rounded-md bg-gray-100"
-          />
-        </div>
+          <div>
+            <label htmlFor="withdrawAmount" className="block font-medium text-gray-700">
+              Withdrawal Amount ($)
+            </label>
+            <input
+              name="withdrawal_amount"
+              type="number"
+              id="withdrawAmount"
+              value={withdrawalAmount}
+              readOnly
+              className="w-full mt-1 p-2 border rounded-md bg-gray-100"
+            />
+          </div>
 
-        <div>
-          <label htmlFor="paymentSystem" className="block font-medium text-gray-700">
-            Select Payment System
-          </label>
-          <select
-            name="payment_system"
-            required
-            id="paymentSystem"
-            className="w-full mt-1 p-2 border rounded-md focus:ring focus:ring-blue-200"
+          <div>
+            <label htmlFor="paymentSystem" className="block font-medium text-gray-700">
+              Select Payment System
+            </label>
+            <select
+              name="payment_system"
+              required
+              id="paymentSystem"
+              className="w-full mt-1 p-2 border rounded-md focus:ring focus:ring-blue-200"
+            >
+              <option value="">Choose Payment System</option>
+              {paymentSystems.map((system) => (
+                <option key={system} value={system}>
+                  {system}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <div>
+            <label htmlFor="accountNumber" className="block font-medium text-gray-700">
+              Account Number
+            </label>
+            <input
+              name="account_number"
+              required
+              type="text"
+              id="accountNumber"
+              value={accountNumber}
+              onChange={(e) => setAccountNumber(e.target.value)}
+              className="w-full mt-1 p-2 border rounded-md focus:ring focus:ring-blue-200"
+              placeholder="Enter Account Number"
+            />
+          </div>
+
+          <button
+            type="submit"
+            disabled={isSubmitDisabled}
+            className={`w-full p-2 rounded-md text-white ${isSubmitDisabled ? "bg-gray-400 cursor-not-allowed" : "bg-blue-600"
+              }`}
           >
-            <option value="">Choose Payment System</option>
-            {paymentSystems.map((system) => (
-              <option key={system} value={system}>
-                {system}
-              </option>
-            ))}
-          </select>
-        </div>
-
-        <div>
-          <label htmlFor="accountNumber" className="block font-medium text-gray-700">
-            Account Number
-          </label>
-          <input
-            name="account_number"
-            required
-            type="text"
-            id="accountNumber"
-            value={accountNumber}
-            onChange={(e) => setAccountNumber(e.target.value)}
-            className="w-full mt-1 p-2 border rounded-md focus:ring focus:ring-blue-200"
-            placeholder="Enter Account Number"
-          />
-        </div>
-
-        <button
-          type="submit"
-          disabled={isSubmitDisabled}
-          className={`w-full p-2 rounded-md text-white ${isSubmitDisabled ? "bg-gray-400 cursor-not-allowed" : "bg-blue-600"
-            }`}
-        >
-          Withdraw
-        </button>
-      </form>
+            Withdraw
+          </button>
+        </form>
+      </div>
     </div>
   );
 };
