@@ -38,7 +38,7 @@ const MySubMissions = () => {
                 <td className="px-4 py-2">{submission.task_title}</td>
                 <td className="px-4 py-2">{submission.buyer_email}</td>
                 <td className="px-4 py-2">$ {submission.payable_amount}</td>
-                <td className="px-4 py-2">{submission.status}</td>
+                <td className="px-4 py-2 capitalize text-bg-primary">{submission.status}</td>
               </tr>
             ))}
           </tbody>
