@@ -7,6 +7,9 @@ import useAxiosPublic from "../../../../hooks/useAxiosPublic";
 
 const AddNewTask = () => {
 
+  const image_hosting_key = import.meta.env.VITE_image_hosting_key;
+  const image_hosting_api = `https://api.imgbb.com/1/upload?key=${image_hosting_key}`
+
   const [user, refetch] = useUser();
   const navigate = useNavigate();
   const axiosPublic = useAxiosPublic();
@@ -18,8 +21,7 @@ const AddNewTask = () => {
     formState: { errors },
   } = useForm();
 
-  const onSubmit = (data) => {
-    console.log(data)
+  const onSubmit = async (data) => {
     const requiredWorkers = parseInt(data.requiredWorkers);
     const payableAmount = parseInt(data.payableAmount);
     const availableCoin = user.availableCoin;
@@ -40,45 +42,53 @@ const AddNewTask = () => {
       });
     }
     else {
+      const imageFile = { image: data.photo[0] }
 
-      const taskInfo = {
-        task_title: data.title,
-        task_detail: data.details,
-        required_workers: parseInt(data.requiredWorkers),
-        payable_amount: parseInt(data.payableAmount),
-        completion_date: data.completionDate,
-        submission_info: data.submissionInfo,
-        task_image_url: data.photo,
-        buyer_email: user.email,
-        buyer_name: user.name,
+      const res = await axiosPublic.post(image_hosting_api, imageFile, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      });
+      if (res.data.success) {
+        const taskInfo = {
+          task_title: data.title,
+          task_detail: data.details,
+          required_workers: parseInt(data.requiredWorkers),
+          payable_amount: parseInt(data.payableAmount),
+          completion_date: data.completionDate,
+          submission_info: data.submissionInfo,
+          task_image_url: res.data.data.display_url,
+          buyer_email: user.email,
+          buyer_name: user.name,
 
-      }
+        }
 
-      axiosPublic.post('/tasks', taskInfo)
-        .then(res => {
-          console.log(res.data)
-          if (res.data.insertedId) {
+        axiosPublic.post('/tasks', taskInfo)
+          .then(res => {
+            console.log(res.data)
+            if (res.data.insertedId) {
+              Swal.fire({
+                position: "center",
+                icon: "success",
+                title: "Task added successful!",
+                showConfirmButton: false,
+                timer: 1500
+              });
+              reset();
+              navigate('/dashboard/my-tasks');
+              refetch();
+            }
+          })
+          .catch(err => {
             Swal.fire({
               position: "center",
-              icon: "success",
-              title: "Task added successful!",
+              icon: "error",
+              title: `${err.message}`,
               showConfirmButton: false,
               timer: 1500
             });
-            reset();
-            navigate('/dashboard/my-tasks');
-            refetch();
-          }
-        })
-        .catch(err => {
-          Swal.fire({
-            position: "center",
-            icon: "error",
-            title: `${err.message}`,
-            showConfirmButton: false,
-            timer: 1500
-          });
-        })
+          })
+      }
     }
   }
 
@@ -144,20 +154,7 @@ const AddNewTask = () => {
 
 
 
-        {/* Photo URL */}
-        <div className="mb-4">
-          <label className="block text-sm font-medium text-gray-700" htmlFor="photo-url">
-            Photo URL
-          </label>
-          <input
-            {...register('photo', { required: true })}
-            type="url"
-            id="photo-url"
-            className="w-full p-2.5 mt-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-bg-primary"
-            placeholder="Enter your photo URL"
-            required
-          />
-        </div>
+        
 
         <div className="mb-4">
           <label className="block text-sm font-medium text-gray-700" htmlFor="completion-date">
@@ -181,6 +178,20 @@ const AddNewTask = () => {
             id="submission-info"
             className="w-full p-2.5 mt-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-bg-primary"
             placeholder="Submission Info"
+            required
+          />
+        </div>
+        {/* Photo URL */}
+        <div className="mb-4">
+          <label className="block text-sm font-medium text-gray-700" htmlFor="photo-url">
+            Photo URL
+          </label>
+          <input
+            {...register('photo', { required: true })}
+            type="file"
+            id="photo-url"
+            className="file-input file-input-bordered w-full mt-2"
+            placeholder="Enter your photo URL"
             required
           />
         </div>
