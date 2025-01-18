@@ -8,6 +8,9 @@ import useAxiosPublic from "../../../hooks/useAxiosPublic";
 
 const Register = () => {
 
+    const image_hosting_key = import.meta.env.VITE_image_hosting_key;
+    const image_hosting_api = `https://api.imgbb.com/1/upload?key=${image_hosting_key}`
+
     const axiosPublic = useAxiosPublic();
     const { createUser, updateUserProfile } = useContext(AuthContext);
     const navigate = useNavigate();
@@ -19,56 +22,69 @@ const Register = () => {
         formState: { errors },
     } = useForm();
 
-    const onSubmit = (data) => {
-        createUser(data.email, data.password)
-            .then(result => {
-                updateUserProfile(data.name, data.photo)
-                    .then(() => {
-                        const availableCoin = data.role === "buyer" ? 50 : 10;
-                        const userInfo = {
-                            name: data.name,
-                            email: data.email,
-                            photo: data.photo,
-                            role: data.role,
-                            availableCoin
-                        }
-                        axiosPublic.post('/users', userInfo)
-                            .then(res => {
-                                console.log(res.data)
-                                if (res.data.insertedId) {
-                                    Swal.fire({
-                                        position: "center",
-                                        icon: "success",
-                                        title: "Registration successful!",
-                                        showConfirmButton: false,
-                                        timer: 1500
-                                    });
-                                    reset();
-                                    navigate('/dashboard');
-                                }
-                            })
-                    })
-                    .catch(err => {
-                        console.log(err.message)
-                        Swal.fire({
-                            position: "center",
-                            icon: "error",
-                            title: `${err.message}`,
-                            showConfirmButton: false,
-                            timer: 1500
-                        });
-                    })
-            })
-            .catch(err => {
-                console.log(err.message)
-                Swal.fire({
-                    position: "center",
-                    icon: "error",
-                    title: `${err.message}`,
-                    showConfirmButton: false,
-                    timer: 1500
-                });
-            })
+    const onSubmit = async (data) => {
+
+
+        const imageFile = { image: data.photo[0] }
+
+        const res = await axiosPublic.post(image_hosting_api, imageFile, {
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            }
+        });
+        if (res.data.success) {
+            createUser(data.email, data.password)
+                .then(result => {
+                    updateUserProfile(data.name, res.data.data.display_url)
+                        .then(() => {
+                            const availableCoin = data.role === "buyer" ? 50 : 10;
+                            const userInfo = {
+                                name: data.name,
+                                email: data.email,
+                                photo: res.data.data.display_url,
+                                role: data.role,
+                                availableCoin
+                            }
+                            axiosPublic.post('/users', userInfo)
+                                .then(res => {
+                                    console.log(res.data)
+                                    if (res.data.insertedId) {
+                                        Swal.fire({
+                                            position: "center",
+                                            icon: "success",
+                                            title: "Registration successful!",
+                                            showConfirmButton: false,
+                                            timer: 1500
+                                        });
+                                        reset();
+                                        navigate('/dashboard');
+                                    }
+                                })
+                        })
+                        .catch(err => {
+                            console.log(err.message)
+                            Swal.fire({
+                                position: "center",
+                                icon: "error",
+                                title: `${err.message}`,
+                                showConfirmButton: false,
+                                timer: 1500
+                            });
+                        })
+                })
+                .catch(err => {
+                    console.log(err.message)
+                    Swal.fire({
+                        position: "center",
+                        icon: "error",
+                        title: `${err.message}`,
+                        showConfirmButton: false,
+                        timer: 1500
+                    });
+                })
+        }
+
+
     }
 
 
@@ -132,20 +148,7 @@ const Register = () => {
                         </select>
                     </div>
 
-                    {/* Photo URL */}
-                    <div className="mb-4">
-                        <label className="block text-sm font-medium text-gray-700" htmlFor="photo-url">
-                            Photo URL
-                        </label>
-                        <input
-                            {...register('photo', { required: true })}
-                            type="url"
-                            id="photo-url"
-                            className="w-full p-2.5 mt-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-bg-primary"
-                            placeholder="Enter your photo URL"
-                            required
-                        />
-                    </div>
+
 
                     {/* Password */}
                     <div className="mb-4">
@@ -160,6 +163,14 @@ const Register = () => {
                             placeholder="Enter your password"
                             required
                         />
+                    </div>
+                    {/* Photo URL */}
+                    <div className="mb-4">
+                        <label className="block text-sm font-medium text-gray-700" htmlFor="photo-url">
+                            Photo URL
+                        </label>
+
+                        <input {...register('photo', { required: true })} required type="file" className="file-input file-input-bordered w-full mt-2" />
                     </div>
 
 
