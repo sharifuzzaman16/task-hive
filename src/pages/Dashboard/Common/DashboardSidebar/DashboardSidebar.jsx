@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { BiMoneyWithdraw } from "react-icons/bi";
 import { MdPayment, MdSubject } from "react-icons/md";
 import { FaHouse, FaUsers } from "react-icons/fa6";
-import { FaCog, FaHistory, FaTasks } from "react-icons/fa";
+import { FaHistory, FaTasks } from "react-icons/fa";
 import useUser from "../../../../hooks/useUser";
 
 const DashboardSidebar = () => {
@@ -27,7 +27,6 @@ const DashboardSidebar = () => {
             { to: "/dashboard/admin-home", label: "Home", icon: <FaHouse /> },
             { to: "/dashboard/manage-users", label: "Manage Users", icon: <FaUsers /> },
             { to: "/dashboard/manage-tasks", label: "Manage Tasks", icon: <FaTasks /> },
-            { to: "/dashboard/settings", label: "Settings", icon: <FaCog /> },
         ],
     };
 
@@ -38,7 +37,7 @@ const DashboardSidebar = () => {
             <div className="flex flex-col items-center">
                 <div className="avatar">
                     <div className="w-24 rounded-full">
-                        <img src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp" />
+                        <img src={user.photo} />
                     </div>
                 </div>
                 <h2 className="text-xl capitalize mt-2 font-semibold">{user.name} <span>({user.role})</span></h2>

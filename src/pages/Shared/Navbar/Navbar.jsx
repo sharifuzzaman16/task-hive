@@ -1,10 +1,12 @@
 import { useContext } from "react";
 import { Link } from "react-router-dom";
 import { AuthContext } from "../../../context/AuthProvider";
+import useUser from "../../../hooks/useUser";
 
 const Navbar = () => {
 
-    const {user, logOut} = useContext(AuthContext);
+    const [user] = useUser();
+    const {user: firebaseUser, logOut} = useContext(AuthContext);
 
     return (
         <header className="bg-white border-b z-50 fixed w-full">
@@ -16,20 +18,22 @@ const Navbar = () => {
                     <a href="https://github.com/sharifuzzaman16" target="_balnk" className="hover:bg-bg-primary px-4 py-2.5 rounded-full border border-text-primary cursor-pointer hover:border-bg-primary hover:text-white text-text-primary">Join as a Developer</a>
 
                     {
-                        user ? <div className="flex items-center gap-4">
+                        firebaseUser ? <div className="flex items-center gap-4">
                             <a className="bg-[#FFF4E6] text-text-primary py-2.5 px-4 rounded-full">$ 400 Coin</a>
                             <div className="dropdown dropdown-end">
                                 <div tabIndex={0} role="button" className="btn btn-ghost btn-circle avatar">
                                     <div className="w-12 rounded-full">
                                         <img
-                                            alt={user.displayName}
-                                            src={user.photoURL} />
+                                            alt={firebaseUser.displayName}
+                                            src={firebaseUser.photoURL} />
                                     </div>
                                 </div>
                                 <ul
                                     tabIndex={0}
                                     className="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow">
-                                    <li><Link to={'/dashboard'}>Dashboard</Link></li>
+                                    {user.role === 'admin' && <li><Link to={'/dashboard/admin-home'}>Dashboard</Link></li>}
+                                    {user.role === 'worker' && <li><Link to={'/dashboard/worker-home'}>Dashboard</Link></li>}
+                                    {user.role === 'buyer' && <li><Link to={'/dashboard/buyer-home'}>Dashboard</Link></li>}
                                     <li><a>Settings</a></li>
                                     <li><a onClick={logOut}>Logout</a></li>
                                 </ul>
