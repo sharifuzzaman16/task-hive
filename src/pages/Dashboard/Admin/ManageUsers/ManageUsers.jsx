@@ -1,23 +1,25 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
 import React from "react";
-import useAxiosPublic from "../../../../hooks/useAxiosPublic";
 import { FaTrash } from "react-icons/fa6";
 import Swal from "sweetalert2";
+import useAxiosSecure from "../../../../hooks/useAxiosSecure";
 
 const ManageUsers = () => {
-  const axiosPublic = useAxiosPublic();
+  const axiosSecure = useAxiosSecure();
 
   const { refetch, data: users = [] } = useQuery({
     queryKey: ["users"],
     queryFn: async () => {
-      const res = await axiosPublic.get("/users");
+      const res = await axiosSecure.get("/users");
       return res.data;
     },
   });
 
+  console.log(localStorage.getItem('access-token'))
+
   const { mutate: deleteUser } = useMutation({
     mutationFn: async (userId) => {
-      const res = await axiosPublic.delete(`/users/${userId}`);
+      const res = await axiosSecure.delete(`/users/${userId}`);
       return res.data;
     },
     onSuccess: () => {
@@ -43,7 +45,7 @@ const ManageUsers = () => {
 
   const { mutate: updateUser } = useMutation({
     mutationFn: async ({ userId, role }) => {
-      const res = await axiosPublic.patch(`/users/${userId}`, { role });
+      const res = await axiosSecure.patch(`/users/${userId}`, { role });
       return res.data;
     },
     onSuccess: (_, { role }) => {

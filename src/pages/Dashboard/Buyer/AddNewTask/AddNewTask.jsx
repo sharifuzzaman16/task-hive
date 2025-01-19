@@ -4,6 +4,7 @@ import useUser from "../../../../hooks/useUser";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
 import useAxiosPublic from "../../../../hooks/useAxiosPublic";
+import useAxiosSecure from "../../../../hooks/useAxiosSecure";
 
 const AddNewTask = () => {
 
@@ -13,6 +14,7 @@ const AddNewTask = () => {
   const [user, refetch] = useUser();
   const navigate = useNavigate();
   const axiosPublic = useAxiosPublic();
+  const axiosSecure = useAxiosSecure();
 
   const {
     register,
@@ -63,7 +65,7 @@ const AddNewTask = () => {
 
         }
 
-        axiosPublic.post('/tasks', taskInfo)
+        axiosSecure.post('/tasks', taskInfo)
           .then(res => {
             console.log(res.data)
             if (res.data.insertedId) {

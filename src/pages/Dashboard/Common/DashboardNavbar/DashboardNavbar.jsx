@@ -2,27 +2,27 @@ import React from "react";
 import { FaRegBell } from "react-icons/fa6";
 import { Link } from "react-router-dom";
 import useUser from "../../../../hooks/useUser";
-import useAxiosPublic from "../../../../hooks/useAxiosPublic";
 import { useQuery } from "@tanstack/react-query";
+import useAxiosSecure from "../../../../hooks/useAxiosSecure";
 
 const DashboardNavbar = () => {
 
     const [user] = useUser();
 
-    const axiosPublic = useAxiosPublic();
+    const axiosSecure = useAxiosSecure();
 
     const { data: users = [] } = useQuery({
         queryKey: ["users"],
         queryFn: async () => {
-            const res = await axiosPublic.get("/users");
+            const res = await axiosSecure.get("/users");
             return res.data;
         },
     });
 
     const totalAvailableCoins = users.reduce((total, user) => {
         return total + Number(user.availableCoin || 0); // Convert availableCoin to a number
-      }, 0);
-      
+    }, 0);
+
 
     return (
         <header className="bg-white border-b fixed z-50 w-full">

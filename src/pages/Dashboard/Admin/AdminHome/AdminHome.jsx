@@ -1,17 +1,17 @@
 import React from "react";
-import useAxiosPublic from "../../../../hooks/useAxiosPublic";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import Swal from "sweetalert2";
+import useAxiosSecure from "../../../../hooks/useAxiosSecure";
 
 const AdminHome = () => {
-  const axiosPublic = useAxiosPublic();
+  const axiosSecure = useAxiosSecure();
   const queryClient = useQueryClient();
 
   // Fetch users data
   const { data: users = [] } = useQuery({
     queryKey: ["users"],
     queryFn: async () => {
-      const res = await axiosPublic.get("/users");
+      const res = await axiosSecure.get("/users");
       return res.data;
     },
   });
@@ -20,7 +20,7 @@ const AdminHome = () => {
   const { data: totalPrice = [] } = useQuery({
     queryKey: ["totalPrice"],
     queryFn: async () => {
-      const res = await axiosPublic.get("/total-payments");
+      const res = await axiosSecure.get("/total-payments");
       return res.data;
     },
   });
@@ -33,7 +33,7 @@ const AdminHome = () => {
   const { data: withdrawals = [], refetch: refetchWithdrawals } = useQuery({
     queryKey: ["withdrawals"],
     queryFn: async () => {
-      const res = await axiosPublic.get("/withdrawal-requests");
+      const res = await axiosSecure.get("/withdrawal-requests");
       return res.data;
     },
   });
@@ -41,7 +41,7 @@ const AdminHome = () => {
   // Mutation to accept a withdrawal request
   const { mutate: acceptPayment } = useMutation({
     mutationFn: async ({ withdrawalId, worker_email, withdrawal_coin }) => {
-      const res = await axiosPublic.patch(`/withdrawal-requests/${withdrawalId}`, {
+      const res = await axiosSecure.patch(`/withdrawal-requests/${withdrawalId}`, {
         status: "success",
         worker_email,
         withdrawal_coin,

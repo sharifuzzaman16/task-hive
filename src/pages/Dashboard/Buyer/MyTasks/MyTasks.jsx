@@ -2,20 +2,20 @@ import { useQuery, useMutation } from "@tanstack/react-query";
 import React, { useContext, useState } from "react";
 import { FaRegEdit } from "react-icons/fa";
 import { FaTrash } from "react-icons/fa6";
-import useAxiosPublic from "../../../../hooks/useAxiosPublic";
 import { AuthContext } from "../../../../context/AuthProvider";
 import { useForm } from "react-hook-form";
 import Swal from "sweetalert2";
+import useAxiosSecure from "../../../../hooks/useAxiosSecure";
 
 const MyTasks = () => {
-  const axiosPublic = useAxiosPublic();
+  const axiosSecure = useAxiosSecure();
   const { user } = useContext(AuthContext);
   const userEmail = user?.email;
 
   const { refetch, data: myTasks = [] } = useQuery({
     queryKey: ['myTasks', userEmail],
     queryFn: async () => {
-      const res = await axiosPublic.get(`/my-tasks?email=${userEmail}`);
+      const res = await axiosSecure.get(`/my-tasks?email=${userEmail}`);
       return res.data;
     },
     enabled: !!userEmail
@@ -29,7 +29,7 @@ const MyTasks = () => {
   // Mutation to update the task
   const { mutate } = useMutation({
     mutationFn: async (updatedTask) => {
-      const res = await axiosPublic.patch(`/tasks/${selectedTask._id}`, updatedTask);
+      const res = await axiosSecure.patch(`/tasks/${selectedTask._id}`, updatedTask);
       return res.data;
     },
     onSuccess: () => {
@@ -81,7 +81,7 @@ const MyTasks = () => {
 
   const { mutate: deleteTask } = useMutation({
     mutationFn: async (taskId) => {
-      const res = await axiosPublic.delete(`/tasks/${taskId}`)
+      const res = await axiosSecure.delete(`/tasks/${taskId}`)
       return res.data
     },
     onSuccess: () => {

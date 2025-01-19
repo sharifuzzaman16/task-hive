@@ -8,7 +8,7 @@ const TaskList = () => {
 
 
   const [page, setPage] = useState(1);
-  const tasksPerPage = 10;
+  const tasksPerPage = 9;
 
   const { data: { tasks = [], totalTasks = 0 } = {}, isLoading } = useQuery({
     queryKey: ["tasks", page],

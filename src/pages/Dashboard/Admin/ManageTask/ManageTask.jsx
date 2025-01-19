@@ -3,21 +3,23 @@ import useAxiosPublic from "../../../../hooks/useAxiosPublic";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { FaTrash } from "react-icons/fa6";
 import Swal from "sweetalert2";
+import useAxiosSecure from "../../../../hooks/useAxiosSecure";
 
 const ManageTask = () => {
   const axiosPublic = useAxiosPublic();
+  const axiosSecure = useAxiosSecure();
 
   const { refetch, data: tasks = [] } = useQuery({
     queryKey: ['tasks'],
     queryFn: async () => {
       const res = await axiosPublic.get('/tasks')
-      return res.data;
+      return res.data.tasks;
     }
   });
 
   const { mutate: deleteTask } = useMutation({
     mutationFn: async (taskId) => {
-      const res = await axiosPublic.delete(`/tasks/${taskId}`)
+      const res = await axiosSecure.delete(`/tasks/${taskId}`)
       return res.data
     },
     onSuccess: () => {

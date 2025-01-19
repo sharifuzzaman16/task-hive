@@ -1,11 +1,11 @@
 import React, { useContext, useState } from "react";
-import useAxiosPublic from "../../../../hooks/useAxiosPublic";
 import { AuthContext } from "../../../../context/AuthProvider";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import Swal from "sweetalert2";
+import useAxiosSecure from "../../../../hooks/useAxiosSecure";
 
 const BuyerHome = () => {
-  const axiosPublic = useAxiosPublic();
+  const axiosSecure = useAxiosSecure();
   const { user } = useContext(AuthContext);
   const userEmail = user?.email;
 
@@ -17,7 +17,7 @@ const BuyerHome = () => {
   const { data: myTasks = [] } = useQuery({
     queryKey: ["myTasks", userEmail],
     queryFn: async () => {
-      const res = await axiosPublic.get(`/my-tasks?email=${userEmail}`);
+      const res = await axiosSecure.get(`/my-tasks?email=${userEmail}`);
       return res.data;
     },
     enabled: !!userEmail,
@@ -26,7 +26,7 @@ const BuyerHome = () => {
   const { data: submissions = [] } = useQuery({
     queryKey: ["submission", userEmail],
     queryFn: async () => {
-      const res = await axiosPublic.get(`/submissions?email=${userEmail}`);
+      const res = await axiosSecure.get(`/submissions?email=${userEmail}`);
       return res.data;
     },
     enabled: !!userEmail,
@@ -35,7 +35,7 @@ const BuyerHome = () => {
   const { data: payments = [] } = useQuery({
     queryKey: ["payment", userEmail],
     queryFn: async () => {
-      const res = await axiosPublic.get(`/payments?email=${userEmail}`);
+      const res = await axiosSecure.get(`/payments?email=${userEmail}`);
       return res.data;
     },
     enabled: !!userEmail,
@@ -67,7 +67,7 @@ const BuyerHome = () => {
 
   const { mutate: approveSubmission } = useMutation({
     mutationFn: async (submissionId) => {
-      const res = await axiosPublic.patch(`/submissions/${submissionId}`, { action: "approved" });
+      const res = await axiosSecure.patch(`/submissions/${submissionId}`, { action: "approved" });
       return res.data;
     },
     onSuccess: () => {
@@ -81,7 +81,7 @@ const BuyerHome = () => {
 
   const { mutate: rejectSubmission } = useMutation({
     mutationFn: async (submissionId) => {
-      const res = await axiosPublic.patch(`/submissions/${submissionId}`, { action: "reject" });
+      const res = await axiosSecure.patch(`/submissions/${submissionId}`, { action: "reject" });
       return res.data;
     },
     onSuccess: () => {

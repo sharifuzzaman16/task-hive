@@ -1,18 +1,18 @@
 import { useQuery } from '@tanstack/react-query';
 import React, { useContext } from 'react';
 import { AuthContext } from '../../../../context/AuthProvider';
-import useAxiosPublic from '../../../../hooks/useAxiosPublic';
+import useAxiosSecure from '../../../../hooks/useAxiosSecure';
 
 const PaymentHistory = () => {
     const { user } = useContext(AuthContext);
-    const axiosPublic = useAxiosPublic();
+    const axiosSecure = useAxiosSecure();
 
     const userEmail = user?.email;
 
     const { data: payments = [], isLoading, error } = useQuery({
         queryKey: ['payment', userEmail],
         queryFn: async () => {
-            const res = await axiosPublic.get(`/payments?email=${userEmail}`);
+            const res = await axiosSecure.get(`/payments?email=${userEmail}`);
             return res.data;
         },
         enabled: !!userEmail, // Ensures the query only runs if userEmail exists

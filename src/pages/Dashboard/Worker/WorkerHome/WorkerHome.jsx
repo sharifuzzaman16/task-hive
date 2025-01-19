@@ -1,19 +1,19 @@
 import React, { useContext } from "react";
 import { AuthContext } from "../../../../context/AuthProvider";
-import useAxiosPublic from "../../../../hooks/useAxiosPublic";
 import { useQuery } from "@tanstack/react-query";
+import useAxiosSecure from "../../../../hooks/useAxiosSecure";
 
 const WorkerHome = () => {
 
 
   const { user } = useContext(AuthContext);
-  const axiosPublic = useAxiosPublic();
+  const axiosSecure = useAxiosSecure();
   const userEmail = user?.email;
 
   const { data: submissions = [] } = useQuery({
     queryKey: ['submission', userEmail],
     queryFn: async () => {
-      const res = await axiosPublic.get(`/submissions?email=${userEmail}`)
+      const res = await axiosSecure.get(`/submissions?email=${userEmail}`)
       return res.data
     },
     enabled: !!userEmail

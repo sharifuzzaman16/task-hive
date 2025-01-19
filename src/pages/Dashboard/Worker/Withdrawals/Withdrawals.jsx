@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import useUser from "../../../../hooks/useUser";
-import useAxiosPublic from "../../../../hooks/useAxiosPublic";
 import Swal from "sweetalert2";
+import useAxiosSecure from "../../../../hooks/useAxiosSecure";
 
 const Withdrawals = () => {
-  const axiosPublic = useAxiosPublic();
+  const axiosSecure = useAxiosSecure();
   const [user] = useUser();
   const totalCoins = user.availableCoin;
   const paymentSystems = ["Bkash", "Rocket", "Nagad", "Other"];
@@ -48,7 +48,7 @@ const Withdrawals = () => {
     };
 
     try {
-      const response = await axiosPublic.post("/withdrawal-requests", withdrawalRequest);
+      const response = await axiosSecure.post("/withdrawal-requests", withdrawalRequest);
       if (response.data.insertedId) {
         Swal.fire({
           position: "center",
