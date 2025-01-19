@@ -1,13 +1,15 @@
-import React from "react";
+import React, { useContext } from "react";
 import { FaRegBell } from "react-icons/fa6";
 import { Link } from "react-router-dom";
 import useUser from "../../../../hooks/useUser";
 import { useQuery } from "@tanstack/react-query";
 import useAxiosSecure from "../../../../hooks/useAxiosSecure";
+import { AuthContext } from "../../../../context/AuthProvider";
 
 const DashboardNavbar = () => {
 
     const [user] = useUser();
+    const {user: firebaseUser, logOut} = useContext(AuthContext);
 
     const axiosSecure = useAxiosSecure();
 
@@ -33,6 +35,24 @@ const DashboardNavbar = () => {
                 <div className="flex-none gap-4 items-center">
                     <a className="bg-[#FFF4E6] text-text-primary py-2.5 px-4 rounded-full">$ {user.role === 'admin' ? totalAvailableCoins : user.availableCoin} Coin</a>
                     <FaRegBell className="text-2xl"></FaRegBell>
+                    <div className="dropdown dropdown-end">
+                        <div tabIndex={0} role="button" className="btn btn-ghost btn-circle avatar">
+                            <div className="w-12 rounded-full">
+                                <img
+                                    alt={firebaseUser.displayName}
+                                    src={firebaseUser.photoURL} />
+                            </div>
+                        </div>
+                        <ul
+                            tabIndex={0}
+                            className="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow">
+                            {user.role === 'admin' && <li><Link to={'/dashboard/admin-home'}>Dashboard</Link></li>}
+                            {user.role === 'worker' && <li><Link to={'/dashboard/worker-home'}>Dashboard</Link></li>}
+                            {user.role === 'buyer' && <li><Link to={'/dashboard/buyer-home'}>Dashboard</Link></li>}
+                            <li><a>Settings</a></li>
+                            <li><a onClick={logOut}>Logout</a></li>
+                        </ul>
+                    </div>
                 </div>
             </div>
         </header>

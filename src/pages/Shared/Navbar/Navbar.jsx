@@ -19,7 +19,7 @@ const Navbar = () => {
 
                     {
                         firebaseUser ? <div className="flex items-center gap-4">
-                            <a className="bg-[#FFF4E6] text-text-primary py-2.5 px-4 rounded-full">$ 400 Coin</a>
+                            <a className="bg-[#FFF4E6] text-text-primary py-2.5 px-4 rounded-full">$ {user.availableCoin} Coin</a>
                             <div className="dropdown dropdown-end">
                                 <div tabIndex={0} role="button" className="btn btn-ghost btn-circle avatar">
                                     <div className="w-12 rounded-full">
