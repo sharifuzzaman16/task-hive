@@ -57,7 +57,7 @@ const Register = () => {
                                             timer: 1500
                                         });
                                         reset();
-                                        navigate('/dashboard');
+                                        navigate('/');
                                     }
                                 })
                         })

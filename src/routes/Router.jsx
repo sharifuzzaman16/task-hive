@@ -19,6 +19,10 @@ import Payment from "../pages/Dashboard/Buyer/PurchaseCoin/Payment/Payment";
 import PaymentHistory from "../pages/Dashboard/Buyer/PaymentHistory/PaymentHistory";
 import TaskDetails from "../pages/Dashboard/Worker/TaskList/TaskDetails/TaskDetails";
 import PrivateRoute from "./PrivateRoute";
+import Unauthorized from "../components/Unauthorized";
+import AdminRoute from "./AdminRoute";
+import BuyerRoute from "./BuyerRoute";
+import WorkerRoute from "./WorkerRoute"
 
 
 const router = createBrowserRouter([
@@ -46,62 +50,66 @@ const router = createBrowserRouter([
     children: [
       {
         path: "/dashboard/worker-home",
-        element: <WorkerHome></WorkerHome>
+        element: <WorkerRoute><WorkerHome></WorkerHome></WorkerRoute>
       },
       {
         path: "/dashboard/tasks",
-        element: <TaskList></TaskList>
+        element: <WorkerRoute><TaskList></TaskList></WorkerRoute>
       },
       {
         path: "/dashboard/tasks/details/:id",
-        element: <TaskDetails></TaskDetails>
+        element: <WorkerRoute><TaskDetails></TaskDetails></WorkerRoute>
       },
       {
         path: "/dashboard/submissions",
-        element: <MySubMissions></MySubMissions>
+        element: <WorkerRoute><MySubMissions></MySubMissions></WorkerRoute>
       },
       {
         path: "/dashboard/withdrawals",
-        element: <Withdrawals></Withdrawals>
+        element: <WorkerRoute><Withdrawals></Withdrawals></WorkerRoute>
       },
       {
         path: "/dashboard/buyer-home",
-        element: <BuyerHome></BuyerHome>
+        element: <BuyerRoute><BuyerHome></BuyerHome></BuyerRoute>
       },
       {
         path: "/dashboard/add-tasks",
-        element: <AddNewTask></AddNewTask>
+        element: <BuyerRoute><AddNewTask></AddNewTask></BuyerRoute>
       },
       {
         path: "/dashboard/my-tasks",
-        element: <MyTasks></MyTasks>
+        element: <BuyerRoute><MyTasks></MyTasks></BuyerRoute>
       },
       {
         path: "/dashboard/purchase",
-        element: <PurchaseCoin></PurchaseCoin>
+        element: <BuyerRoute><PurchaseCoin></PurchaseCoin></BuyerRoute>
       },
       {
         path: "/dashboard/payment",
-        element: <Payment></Payment>
+        element: <BuyerRoute><Payment></Payment></BuyerRoute>
       },
       {
         path: "/dashboard/payment-history",
-        element: <PaymentHistory></PaymentHistory>
+        element: <BuyerRoute><PaymentHistory></PaymentHistory></BuyerRoute>
       },
       {
         path: "/dashboard/admin-home",
-        element: <AdminHome></AdminHome>
+        element: <AdminRoute><AdminHome></AdminHome></AdminRoute>
       },
       {
         path: "/dashboard/manage-users",
-        element: <ManageUsers></ManageUsers>
+        element: <AdminRoute><ManageUsers></ManageUsers></AdminRoute>
       },
       {
         path: "/dashboard/manage-tasks",
-        element: <ManageTask></ManageTask>
+        element: <AdminRoute><ManageTask></ManageTask></AdminRoute>
       },
 
     ]
+  },
+  {
+    path: "/unauthorized",
+    element: <Unauthorized></Unauthorized>
   }
 ]);
 
