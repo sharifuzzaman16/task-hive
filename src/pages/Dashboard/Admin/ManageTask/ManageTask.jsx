@@ -12,8 +12,8 @@ const ManageTask = () => {
   const { refetch, data: tasks = [] } = useQuery({
     queryKey: ['tasks'],
     queryFn: async () => {
-      const res = await axiosPublic.get('/tasks')
-      return res.data.tasks;
+      const res = await axiosPublic.get('/manage-tasks')
+      return res.data;
     }
   });
 
@@ -64,7 +64,7 @@ const ManageTask = () => {
 
   return (
     <div>
-      <h1 className="text-2xl font-bold mb-4">Manage Task</h1>
+      <h1 className="text-2xl font-bold mb-4">Manage Task ({tasks.length})</h1>
       <div className="bg-white shadow rounded overflow-hidden">
         <table className="min-w-full table-auto">
           <thead className="bg-gray-100">

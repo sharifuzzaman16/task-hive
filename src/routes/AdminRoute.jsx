@@ -17,7 +17,6 @@ const AdminRoute = ({ children }) => {
     return children;
   }
 
-  return <Navigate to="/unauthorized" />;
 };
 
 export default AdminRoute;

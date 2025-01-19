@@ -22,7 +22,7 @@ const TopWorkers = () => {
   return (
     <div>
       <SectionTitle heading={'Best Workers'} subHeading={'Meet Some of Our Top Performers'}></SectionTitle>
-      <div className='grid grid-cols-4 gap-10 justify-items-center'>
+      <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 justify-items-center'>
         {
           topWorkers.map((topWorker, idx) => <TopWorkerCard key={idx} topWorker={topWorker}></TopWorkerCard>)
         }

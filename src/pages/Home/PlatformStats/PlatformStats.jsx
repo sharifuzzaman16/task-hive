@@ -8,7 +8,7 @@ const PlatformStats = () => {
     return (
         <div className="text-center">
             <SectionTitle heading={'Platform Statistics'} subHeading={'See our platform’s growth in numbers'}></SectionTitle>
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mt-10">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mt-10">
                 {[
                     { label: "Total Tasks", count: 15200, icon: <FaTasks /> },
                     { label: "Active Users", count: 4500, icon: <FaUsers /> },

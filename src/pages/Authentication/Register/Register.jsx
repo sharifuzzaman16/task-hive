@@ -1,15 +1,14 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import registerIllustration from "../../../assets/Mobile login-cuate.svg";
-import { useForm } from "react-hook-form"
+import { useForm } from "react-hook-form";
 import { AuthContext } from "../../../context/AuthProvider";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
 import useAxiosPublic from "../../../hooks/useAxiosPublic";
 
 const Register = () => {
-
     const image_hosting_key = import.meta.env.VITE_image_hosting_key;
-    const image_hosting_api = `https://api.imgbb.com/1/upload?key=${image_hosting_key}`
+    const image_hosting_api = `https://api.imgbb.com/1/upload?key=${image_hosting_key}`;
 
     const axiosPublic = useAxiosPublic();
     const { createUser, updateUserProfile } = useContext(AuthContext);
@@ -22,19 +21,26 @@ const Register = () => {
         formState: { errors },
     } = useForm();
 
+    const [passwordStrength, setPasswordStrength] = useState("");
+
+    // Check password strength
+    const checkPasswordStrength = (password) => {
+        const strength = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+        setPasswordStrength(strength.test(password) ? "strong" : "weak");
+    };
+
     const onSubmit = async (data) => {
-
-
-        const imageFile = { image: data.photo[0] }
+        const imageFile = { image: data.photo[0] };
 
         const res = await axiosPublic.post(image_hosting_api, imageFile, {
             headers: {
-                'Content-Type': 'multipart/form-data'
-            }
+                "Content-Type": "multipart/form-data",
+            },
         });
+
         if (res.data.success) {
             createUser(data.email, data.password)
-                .then(result => {
+                .then((result) => {
                     updateUserProfile(data.name, res.data.data.display_url)
                         .then(() => {
                             const availableCoin = data.role === "buyer" ? 50 : 10;
@@ -43,50 +49,54 @@ const Register = () => {
                                 email: data.email,
                                 photo: res.data.data.display_url,
                                 role: data.role,
-                                availableCoin
-                            }
-                            axiosPublic.post('/users', userInfo)
-                                .then(res => {
-                                    console.log(res.data)
+                                availableCoin,
+                            };
+                            axiosPublic
+                                .post("/users", userInfo)
+                                .then((res) => {
                                     if (res.data.insertedId) {
                                         Swal.fire({
                                             position: "center",
                                             icon: "success",
                                             title: "Registration successful!",
                                             showConfirmButton: false,
-                                            timer: 1500
+                                            timer: 1500,
                                         });
                                         reset();
-                                        navigate('/');
+                                        navigate("/");
                                     }
                                 })
+                                .catch((err) => {
+                                    Swal.fire({
+                                        position: "center",
+                                        icon: "error",
+                                        title: `${err.message}`,
+                                        showConfirmButton: false,
+                                        timer: 1500,
+                                    });
+                                });
                         })
-                        .catch(err => {
-                            console.log(err.message)
+                        .catch((err) => {
                             Swal.fire({
                                 position: "center",
                                 icon: "error",
                                 title: `${err.message}`,
                                 showConfirmButton: false,
-                                timer: 1500
+                                timer: 1500,
                             });
-                        })
+                        });
                 })
-                .catch(err => {
-                    console.log(err.message)
+                .catch((err) => {
                     Swal.fire({
                         position: "center",
                         icon: "error",
                         title: `${err.message}`,
                         showConfirmButton: false,
-                        timer: 1500
+                        timer: 1500,
                     });
-                })
+                });
         }
-
-
-    }
-
+    };
 
     return (
         <div className="flex bg-white w-4/5 h-[700px] mx-auto shadow-lg my-10">
@@ -107,13 +117,13 @@ const Register = () => {
                             Full Name
                         </label>
                         <input
-                            {...register('name', { required: true })}
+                            {...register("name", { required: "Full Name is required" })}
                             type="text"
                             id="full-name"
                             className="w-full p-2.5 mt-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-bg-primary"
                             placeholder="Enter your full name"
-                            required
                         />
+                        {errors.name && <p className="text-red-500 text-sm">{errors.name.message}</p>}
                     </div>
 
                     {/* Email */}
@@ -122,13 +132,19 @@ const Register = () => {
                             Email
                         </label>
                         <input
-                            {...register('email', { required: true })}
+                            {...register("email", {
+                                required: "Email is required",
+                                pattern: {
+                                    value: /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/,
+                                    message: "Invalid email address",
+                                },
+                            })}
                             type="email"
                             id="email"
                             className="w-full p-2.5 mt-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-bg-primary"
                             placeholder="Enter your email"
-                            required
                         />
+                        {errors.email && <p className="text-red-500 text-sm">{errors.email.message}</p>}
                     </div>
 
                     {/* Dropdown for Role (Worker/Buyer) */}
@@ -137,18 +153,18 @@ const Register = () => {
                             Role
                         </label>
                         <select
-                            {...register('role', { required: true })}
+                            {...register("role", { required: "Role is required" })}
                             id="role"
                             className="w-full p-2.5 mt-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-bg-primary"
-                            required
                         >
-                            <option value="" disabled>Select your role</option>
+                            <option value="" disabled>
+                                Select your role
+                            </option>
                             <option value="worker">Worker</option>
                             <option value="buyer">Buyer</option>
                         </select>
+                        {errors.role && <p className="text-red-500 text-sm">{errors.role.message}</p>}
                     </div>
-
-
 
                     {/* Password */}
                     <div className="mb-4">
@@ -156,30 +172,41 @@ const Register = () => {
                             Password
                         </label>
                         <input
-                            {...register('password', { required: true })}
+                            {...register("password", {
+                                required: "Password is required",
+                                minLength: {
+                                    value: 8,
+                                    message: "Password must be at least 8 characters long",
+                                },
+                                onChange: (e) => checkPasswordStrength(e.target.value),
+                            })}
                             type="password"
                             id="password"
                             className="w-full p-2.5 mt-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-bg-primary"
                             placeholder="Enter your password"
-                            required
                         />
+                        {errors.password && <p className="text-red-500 text-sm">{errors.password.message}</p>}
+                        <p className={`mt-1 text-sm ${passwordStrength === "strong" ? "text-green-500" : "text-red-500"}`}>
+                            {passwordStrength === "strong" ? "Password is strong" : "Password is weak"}
+                        </p>
                     </div>
+
                     {/* Photo URL */}
                     <div className="mb-4">
                         <label className="block text-sm font-medium text-gray-700" htmlFor="photo-url">
                             Photo URL
                         </label>
-
-                        <input {...register('photo', { required: true })} required type="file" className="file-input file-input-bordered w-full mt-2" />
+                        <input
+                            {...register("photo", { required: "Photo is required" })}
+                            required
+                            type="file"
+                            className="file-input file-input-bordered w-full mt-2"
+                        />
+                        {errors.photo && <p className="text-red-500 text-sm">{errors.photo.message}</p>}
                     </div>
 
-
-
                     {/* Register Button */}
-                    <button
-                        type="submit"
-                        className="w-full py-2.5 bg-bg-primary text-white text-lg font-semibold rounded-md"
-                    >
+                    <button type="submit" className="w-full py-2.5 bg-bg-primary text-white text-lg font-semibold rounded-md">
                         Register
                     </button>
                 </form>

@@ -2,11 +2,27 @@ import { useContext } from "react";
 import { Link } from "react-router-dom";
 import { AuthContext } from "../../../context/AuthProvider";
 import useUser from "../../../hooks/useUser";
+import useAxiosSecure from "../../../hooks/useAxiosSecure";
+import { useQuery } from "@tanstack/react-query";
 
 const Navbar = () => {
 
     const [user] = useUser();
-    const {user: firebaseUser, logOut} = useContext(AuthContext);
+    const { user: firebaseUser, logOut } = useContext(AuthContext);
+
+    const axiosSecure = useAxiosSecure();
+
+    const { data: users = [] } = useQuery({
+        queryKey: ["users"],
+        queryFn: async () => {
+            const res = await axiosSecure.get("/users");
+            return res.data;
+        },
+    });
+
+    const totalAvailableCoins = users.reduce((total, user) => {
+        return total + Number(user.availableCoin || 0); // Convert availableCoin to a number
+    }, 0);
 
     return (
         <header className="bg-white border-b z-50 fixed w-full">
@@ -19,7 +35,7 @@ const Navbar = () => {
 
                     {
                         firebaseUser ? <div className="flex items-center gap-4">
-                            <a className="bg-[#FFF4E6] text-text-primary py-2.5 px-4 rounded-full">$ {user.availableCoin} Coin</a>
+                            <a className="bg-[#FFF4E6] text-text-primary py-2.5 px-4 rounded-full">$ {user.role === 'admin' ? totalAvailableCoins : user.availableCoin} Coin</a>
                             <div className="dropdown dropdown-end">
                                 <div tabIndex={0} role="button" className="btn btn-ghost btn-circle avatar">
                                     <div className="w-12 rounded-full">

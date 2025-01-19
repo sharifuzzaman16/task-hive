@@ -20,7 +20,7 @@ const FeaturedWorks = () => {
     return (
         <div>
             <SectionTitle heading={'Featured Tasks'} subHeading={'Highlighted Ongoing Tasks'}></SectionTitle>
-            <div className='grid grid-cols-3 gap-10 justify-items-center'>
+            <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 justify-items-center'>
                 {
                     featuredTasks.map((task, idx) => <TaskCard key={idx} task={task}></TaskCard>)
                 }

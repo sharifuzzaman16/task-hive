@@ -6,10 +6,9 @@ import { useQuery } from "@tanstack/react-query";
 import useAxiosSecure from "../../../../hooks/useAxiosSecure";
 import { AuthContext } from "../../../../context/AuthProvider";
 
-const DashboardNavbar = () => {
-
+const DashboardNavbar = ({ toggleSidebar }) => {
     const [user] = useUser();
-    const {user: firebaseUser, logOut} = useContext(AuthContext);
+    const { user: firebaseUser, logOut } = useContext(AuthContext);
 
     const axiosSecure = useAxiosSecure();
 
@@ -25,16 +24,25 @@ const DashboardNavbar = () => {
         return total + Number(user.availableCoin || 0); // Convert availableCoin to a number
     }, 0);
 
-
     return (
         <header className="bg-white border-b fixed z-50 w-full">
             <div className="navbar w-11/12 mx-auto h-[75px]">
-                <div className="flex-1">
+                <div className="flex-1 flex items-center">
+                    {/* Hamburger Button for Mobile */}
+                    <button
+                        className="md:hidden text-xl mr-4"
+                        onClick={toggleSidebar}
+                    >
+                        ☰
+                    </button>
+
                     <Link to={'/'} className="text-xl font-bold text-text-primary">TaskHive</Link>
                 </div>
                 <div className="flex-none gap-4 items-center">
-                    <a className="bg-[#FFF4E6] text-text-primary py-2.5 px-4 rounded-full">$ {user.role === 'admin' ? totalAvailableCoins : user.availableCoin} Coin</a>
-                    <FaRegBell className="text-2xl"></FaRegBell>
+                    <a className="bg-[#FFF4E6] text-text-primary py-2.5 px-4 rounded-full">
+                        $ {user.role === 'admin' ? totalAvailableCoins : user.availableCoin} Coin
+                    </a>
+                    <FaRegBell className="text-2xl" />
                     <div className="dropdown dropdown-end">
                         <div tabIndex={0} role="button" className="btn btn-ghost btn-circle avatar">
                             <div className="w-12 rounded-full">

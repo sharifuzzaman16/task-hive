@@ -17,7 +17,6 @@ const BuyerRoute = ({ children }) => {
     return children;
   }
 
-  return <Navigate to="/unauthorized" />;
 };
 
 export default BuyerRoute;

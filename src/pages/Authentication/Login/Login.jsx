@@ -5,6 +5,7 @@ import { useForm } from "react-hook-form";
 import { AuthContext } from "../../../context/AuthProvider";
 import { useNavigate } from "react-router-dom";
 import useAxiosPublic from "../../../hooks/useAxiosPublic";
+import Swal from "sweetalert2"; // Import SweetAlert2
 
 const Login = () => {
 
@@ -22,40 +23,53 @@ const Login = () => {
     const onSubmit = (data) => {
         loginUser(data.email, data.password)
             .then(result => {
-                console.log(result.user)
+                console.log(result.user);
                 navigate('/');
                 reset();
             })
             .catch(err => {
-                console.log(err.message)
-            })
-    }
+                console.log(err.message);
+                // Show SweetAlert for incorrect login
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Login Failed',
+                    text: 'Invalid email or password. Please try again.',
+                });
+            });
+    };
+
     const handleGoogleLogin = () => {
         loginWithGoogle()
             .then(result => {
-                console.log(result.user)
+                console.log(result.user);
                 const userInfo = {
                     name: result.user.displayName,
                     email: result.user.email,
                     photo: result.user.photoURL,
                     role: 'worker',
                     availableCoin: 10,
-                }
+                };
                 axiosPublic.post('/users', userInfo)
                     .then(res => {
-                        console.log(res.data)
+                        console.log(res.data);
                         if (res.data.insertedId) {
                             navigate('/dashboard');
                         }
                     })
                     .catch(err => {
-                        console.log(err.message)
-                    })
+                        console.log(err.message);
+                    });
             })
             .catch(err => {
-                console.log(err.message)
-            })
-    }
+                console.log(err.message);
+                // Show SweetAlert for Google login failure
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Google Login Failed',
+                    text: 'There was an issue logging in with Google. Please try again.',
+                });
+            });
+    };
 
     return (
         <div className="flex bg-white w-4/5 h-[550px] mx-auto shadow-lg my-10">
@@ -105,6 +119,8 @@ const Login = () => {
                         Login
                     </button>
                 </form>
+
+                {/* Google Login Button */}
                 <div className="flex justify-center my-4">
                     <button
                         onClick={handleGoogleLogin}
@@ -114,10 +130,11 @@ const Login = () => {
                     </button>
                 </div>
 
+                {/* Sign Up Link */}
                 <div className="text-center mt-4">
                     <p className="text-sm text-gray-600">
                         Don't have an account?{" "}
-                        <a href="/signup" className="text-bg-primary hover:underline">
+                        <a href="/register" className="text-bg-primary hover:underline">
                             Sign up
                         </a>
                     </p>

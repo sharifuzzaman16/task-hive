@@ -6,7 +6,7 @@ const HowItWorks = () => {
 
         <div className="text-center">
             <SectionTitle heading={'How It Works'} subHeading={'Get started in 4 easy steps'}></SectionTitle>
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-10">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
                 {[
                     { icon: "📝", title: "Register", description: "Sign up as a Worker or Buyer" },
                     { icon: "🔍", title: "Explore Tasks", description: "Browse tasks or create your own" },

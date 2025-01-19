@@ -19,12 +19,12 @@ const Hero = () => {
         >
             <SwiperSlide>
                 <div className='flex  items-center h-[550px] w-11/12 mx-auto'>
-                    <div className='w-1/2'>
+                    <div className='md:w-1/2'>
                         <h2 className='text-text-primary text-5xl font-bold'>Earn Money, Complete Tasks, and Grow Your Earnings!</h2>
                         <p className='text-text-secondary text-xl mt-4 leading-6'>Join a thriving community of Workers and Buyers. Complete tasks, earn rewards, and take control of your financial future.</p>
                         <button className='mt-6 px-4 py-3 bg-bg-primary rounded-lg text-white'>Browse Tasks</button>
                     </div>
-                    <div className='w-1/2'>
+                    <div className='w-1/2 hidden md:block'>
                         <img className='w-full' src={onlineArt} />
                     </div>
                 </div>
