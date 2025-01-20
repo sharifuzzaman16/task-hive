@@ -2,6 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import React, { useContext } from "react";
 import { AuthContext } from "../../../../context/AuthProvider";
 import useAxiosSecure from "../../../../hooks/useAxiosSecure";
+import { Helmet } from "react-helmet-async";
 
 const MySubMissions = () => {
 
@@ -21,6 +22,9 @@ const MySubMissions = () => {
 
   return (
     <div>
+      <Helmet>
+              <title>Dashboard | My Submissions - TaskHive</title>
+            </Helmet>
       <h1 className="text-2xl font-bold mb-4">My Submissions</h1>
       <div className="bg-white shadow rounded overflow-hidden">
         <table className="min-w-full table-auto">

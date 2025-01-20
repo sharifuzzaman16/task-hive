@@ -4,6 +4,7 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import { FaTrash } from "react-icons/fa6";
 import Swal from "sweetalert2";
 import useAxiosSecure from "../../../../hooks/useAxiosSecure";
+import { Helmet } from "react-helmet-async";
 
 const ManageTask = () => {
   const axiosPublic = useAxiosPublic();
@@ -64,6 +65,9 @@ const ManageTask = () => {
 
   return (
     <div>
+      <Helmet>
+              <title>Dashboard | Manage Task - TaskHive</title>
+            </Helmet>
       <h1 className="text-2xl font-bold mb-4">Manage Task ({tasks.length})</h1>
       <div className="bg-white shadow rounded overflow-hidden">
         <table className="min-w-full table-auto">

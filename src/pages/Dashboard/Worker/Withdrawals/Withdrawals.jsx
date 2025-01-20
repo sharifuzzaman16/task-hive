@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import useUser from "../../../../hooks/useUser";
 import Swal from "sweetalert2";
 import useAxiosSecure from "../../../../hooks/useAxiosSecure";
+import { Helmet } from "react-helmet-async";
 
 const Withdrawals = () => {
   const axiosSecure = useAxiosSecure();
@@ -77,6 +78,9 @@ const Withdrawals = () => {
 
   return (
     <div>
+      <Helmet>
+              <title>Dashboard | Withdrawals - TaskHive</title>
+            </Helmet>
       <h1 className="text-2xl font-bold mb-4">My Submissions</h1>
       <div className="p-6 max-w-lg mx-auto bg-white rounded-lg shadow-md">
         <h2 className="text-2xl font-bold text-gray-800 mb-4">Withdraw Funds</h2>

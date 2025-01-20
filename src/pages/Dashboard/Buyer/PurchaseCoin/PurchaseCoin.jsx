@@ -1,4 +1,5 @@
 import React from "react";
+import { Helmet } from "react-helmet-async";
 import { useNavigate } from "react-router-dom";
 
 const PurchaseCoin = () => {
@@ -19,6 +20,9 @@ const PurchaseCoin = () => {
 
   return (
     <div className="">
+      <Helmet>
+              <title>Dashboard | PurchaseCoin - TaskHive</title>
+            </Helmet>
      <h1 className="text-2xl font-bold mb-4">Purchase Coin</h1>
       <div className="flex flex-wrap justify-center gap-6">
         {packages.map((pkg) => (

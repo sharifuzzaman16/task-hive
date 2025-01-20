@@ -2,6 +2,7 @@ import React, { useContext } from "react";
 import { AuthContext } from "../../../../context/AuthProvider";
 import { useQuery } from "@tanstack/react-query";
 import useAxiosSecure from "../../../../hooks/useAxiosSecure";
+import { Helmet } from "react-helmet-async";
 
 const WorkerHome = () => {
 
@@ -26,6 +27,9 @@ const WorkerHome = () => {
 
   return (
     <div>
+      <Helmet>
+              <title>Dashboard | Worker Home - TaskHive</title>
+            </Helmet>
       <h1 className="text-2xl font-bold mb-4">Worker Dashboard</h1>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         <div className="bg-white p-4 shadow rounded text-center">

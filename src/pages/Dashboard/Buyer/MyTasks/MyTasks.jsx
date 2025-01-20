@@ -6,6 +6,7 @@ import { AuthContext } from "../../../../context/AuthProvider";
 import { useForm } from "react-hook-form";
 import Swal from "sweetalert2";
 import useAxiosSecure from "../../../../hooks/useAxiosSecure";
+import { Helmet } from "react-helmet-async";
 
 const MyTasks = () => {
   const axiosSecure = useAxiosSecure();
@@ -126,6 +127,9 @@ const MyTasks = () => {
 
   return (
     <div>
+      <Helmet>
+              <title>Dashboard | My Tasks - TaskHive</title>
+            </Helmet>
       <h1 className="text-2xl font-bold mb-4">My Tasks</h1>
       <div className="bg-white shadow rounded overflow-hidden">
         <table className="min-w-full table-auto">

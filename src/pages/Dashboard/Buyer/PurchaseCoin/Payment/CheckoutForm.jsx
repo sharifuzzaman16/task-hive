@@ -45,7 +45,6 @@ const CheckoutForm = () => {
         if (error) {
             setError(error.message)
         } else {
-            console.log('payment method', paymentMethod)
             setError('');
         }
         const { paymentIntent, error: confirmError } = await stripe.confirmCardPayment(clientSecret, {
@@ -58,7 +57,6 @@ const CheckoutForm = () => {
             }
         })
         if (confirmError) {
-            console.log('confirm error', confirmError)
             Swal.fire({
                 position: "center",
                 icon: "error",
@@ -67,7 +65,6 @@ const CheckoutForm = () => {
                 timer: 1500
               });
         } else {
-            console.log('payment intent', paymentIntent)
             if (paymentIntent.status === 'succeeded') {
 
                 const payment = {

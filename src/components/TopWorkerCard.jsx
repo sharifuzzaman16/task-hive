@@ -3,7 +3,6 @@ import { FaBookmark, FaStar } from 'react-icons/fa6';
 
 const TopWorkerCard = ({ topWorker }) => {
     const { name, photo, availableCoin } = topWorker;
-    console.log(topWorker)
     return (
         <div className='bg-white w-64 h-72 relative shadow-lg rounded-lg flex flex-col justify-center items-center'>
             <div className={'avatar online'}>

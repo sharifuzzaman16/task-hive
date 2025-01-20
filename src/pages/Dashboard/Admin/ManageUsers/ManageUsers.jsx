@@ -3,6 +3,7 @@ import React from "react";
 import { FaTrash } from "react-icons/fa6";
 import Swal from "sweetalert2";
 import useAxiosSecure from "../../../../hooks/useAxiosSecure";
+import { Helmet } from "react-helmet-async";
 
 const ManageUsers = () => {
   const axiosSecure = useAxiosSecure();
@@ -15,7 +16,6 @@ const ManageUsers = () => {
     },
   });
 
-  console.log(localStorage.getItem('access-token'))
 
   const { mutate: deleteUser } = useMutation({
     mutationFn: async (userId) => {
@@ -93,6 +93,9 @@ const ManageUsers = () => {
 
   return (
     <div>
+      <Helmet>
+              <title>Dashboard | Manage Users - TaskHive</title>
+            </Helmet>
       <h1 className="text-2xl font-bold mb-4">
         Manage Users ({users.length})
       </h1>

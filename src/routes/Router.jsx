@@ -58,7 +58,7 @@ const router = createBrowserRouter([
       },
       {
         path: "/dashboard/tasks/details/:id",
-        element: <WorkerRoute><TaskDetails></TaskDetails></WorkerRoute>
+        element: <TaskDetails></TaskDetails>
       },
       {
         path: "/dashboard/submissions",

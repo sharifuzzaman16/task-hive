@@ -5,6 +5,7 @@ import { AuthContext } from "../../../context/AuthProvider";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
 import useAxiosPublic from "../../../hooks/useAxiosPublic";
+import { Helmet } from "react-helmet-async";
 
 const Register = () => {
     const image_hosting_key = import.meta.env.VITE_image_hosting_key;
@@ -100,6 +101,9 @@ const Register = () => {
 
     return (
         <div className="flex bg-white w-4/5 h-[700px] mx-auto shadow-lg my-10">
+            <Helmet>
+                    <title>Register - TaskHive</title>
+                  </Helmet>
             {/* Left side with image */}
             <div className="w-1/2">
                 <img className="w-full h-full object-cover" src={registerIllustration} alt="Registration Illustration" />

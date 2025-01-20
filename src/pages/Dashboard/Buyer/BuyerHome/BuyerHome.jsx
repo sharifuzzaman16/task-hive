@@ -3,6 +3,7 @@ import { AuthContext } from "../../../../context/AuthProvider";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import Swal from "sweetalert2";
 import useAxiosSecure from "../../../../hooks/useAxiosSecure";
+import { Helmet } from "react-helmet-async";
 
 const BuyerHome = () => {
   const axiosSecure = useAxiosSecure();
@@ -128,6 +129,9 @@ const BuyerHome = () => {
 
   return (
     <div>
+      <Helmet>
+              <title>Dashboard | Buyer Home - TaskHive</title>
+            </Helmet>
       <h1 className="text-2xl font-bold mb-4">Worker Dashboard</h1>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         <div className="bg-white p-4 shadow rounded text-center">

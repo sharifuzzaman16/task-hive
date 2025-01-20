@@ -6,6 +6,7 @@ import { AuthContext } from "../../../context/AuthProvider";
 import { useNavigate } from "react-router-dom";
 import useAxiosPublic from "../../../hooks/useAxiosPublic";
 import Swal from "sweetalert2"; // Import SweetAlert2
+import { Helmet } from "react-helmet-async";
 
 const Login = () => {
 
@@ -23,12 +24,10 @@ const Login = () => {
     const onSubmit = (data) => {
         loginUser(data.email, data.password)
             .then(result => {
-                console.log(result.user);
                 navigate('/');
                 reset();
             })
             .catch(err => {
-                console.log(err.message);
                 // Show SweetAlert for incorrect login
                 Swal.fire({
                     icon: 'error',
@@ -41,7 +40,6 @@ const Login = () => {
     const handleGoogleLogin = () => {
         loginWithGoogle()
             .then(result => {
-                console.log(result.user);
                 const userInfo = {
                     name: result.user.displayName,
                     email: result.user.email,
@@ -51,17 +49,14 @@ const Login = () => {
                 };
                 axiosPublic.post('/users', userInfo)
                     .then(res => {
-                        console.log(res.data);
                         if (res.data.insertedId) {
                             navigate('/dashboard');
                         }
                     })
                     .catch(err => {
-                        console.log(err.message);
                     });
             })
             .catch(err => {
-                console.log(err.message);
                 // Show SweetAlert for Google login failure
                 Swal.fire({
                     icon: 'error',
@@ -73,6 +68,9 @@ const Login = () => {
 
     return (
         <div className="flex bg-white w-4/5 h-[550px] mx-auto shadow-lg my-10">
+            <Helmet>
+                    <title>Login - TaskHive</title>
+                  </Helmet>
             {/* Left side with image */}
             <div className="w-1/2">
                 <img className="w-full h-full object-cover" src={loginIllustrations} alt="Login Illustration" />

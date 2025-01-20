@@ -5,6 +5,7 @@ import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
 import useAxiosPublic from "../../../../hooks/useAxiosPublic";
 import useAxiosSecure from "../../../../hooks/useAxiosSecure";
+import { Helmet } from "react-helmet-async";
 
 const AddNewTask = () => {
 
@@ -67,7 +68,6 @@ const AddNewTask = () => {
 
         axiosSecure.post('/tasks', taskInfo)
           .then(res => {
-            console.log(res.data)
             if (res.data.insertedId) {
               Swal.fire({
                 position: "center",
@@ -97,6 +97,9 @@ const AddNewTask = () => {
 
   return (
     <div>
+      <Helmet>
+              <title>Dashboard | Add New Task - TaskHive</title>
+            </Helmet>
       <h1 className="text-2xl font-bold mb-4">Add New Task</h1>
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="mb-4">

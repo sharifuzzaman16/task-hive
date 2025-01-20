@@ -4,6 +4,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import useAxiosPublic from "../../../../../hooks/useAxiosPublic";
 import { AuthContext } from "../../../../../context/AuthProvider";
 import Swal from "sweetalert2";
+import { Helmet } from "react-helmet-async";
 
 const TaskDetails = () => {
     const { id } = useParams();
@@ -46,7 +47,6 @@ const TaskDetails = () => {
 
         axiosPublic.post('/submissions', submissionInfo)
             .then(res => {
-                console.log(res.data)
                 if (res.data.insertedId) {
                     Swal.fire({
                         position: "center",
@@ -73,6 +73,9 @@ const TaskDetails = () => {
 
     return (
         <div>
+            <Helmet>
+                <title>{task.task_detail} - TaskHive</title>
+            </Helmet>
             <h1 className="text-2xl font-bold mb-4">Task Details</h1>
             <div className="max-w-5xl mx-auto bg-white shadow-lg rounded-lg overflow-hidden">
                 {/* Task Details Section */}

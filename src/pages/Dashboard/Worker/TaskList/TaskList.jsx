@@ -2,6 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import React, { useState } from "react";
 import useAxiosPublic from "../../../../hooks/useAxiosPublic";
 import TaskCard from "../../../../components/TaskCard";
+import { Helmet } from "react-helmet-async";
 
 const TaskList = () => {
   const axiosPublic = useAxiosPublic();
@@ -23,6 +24,9 @@ const TaskList = () => {
 
   return (
     <div>
+      <Helmet>
+              <title>Dashboard | Task List - TaskHive</title>
+            </Helmet>
       <h1 className="text-2xl font-bold mb-4">Task List</h1>
 
       {isLoading ? (

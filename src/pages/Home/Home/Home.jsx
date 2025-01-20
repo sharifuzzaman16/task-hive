@@ -1,3 +1,4 @@
+import { Helmet } from "react-helmet-async";
 import Faqs from "../FAQS/Faqs";
 import FeaturedWorks from "../FeaturedWorks/FeaturedWorks";
 import Hero from "../Hero/Hero";
@@ -10,6 +11,9 @@ import WhyChooseUs from "../WhyChooseUs/WhyChooseUs";
 const Home = () => {
     return (
         <>
+        <Helmet>
+            <title>Welcome - TaskHive</title>
+        </Helmet>
             <header className="bg-[#FFF4E6] w-full">
                 <Hero></Hero>
             </header>
