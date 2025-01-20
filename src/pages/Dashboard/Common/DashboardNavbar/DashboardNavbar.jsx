@@ -27,7 +27,6 @@ const DashboardNavbar = ({ toggleSidebar }) => {
         },
     });
 
-    console.log(notifications)
 
     const totalAvailableCoins = users.reduce((total, user) => {
         return total + Number(user.availableCoin || 0); // Convert availableCoin to a number

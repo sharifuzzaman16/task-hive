@@ -65,7 +65,6 @@ const AdminHome = () => {
       return { previousWithdrawals };
     },
     onError: (err, variables, context) => {
-      console.error("Error updating withdrawal:", err);
       // Rollback to previous state
       queryClient.setQueryData(["withdrawals"], context.previousWithdrawals);
       Swal.fire({
