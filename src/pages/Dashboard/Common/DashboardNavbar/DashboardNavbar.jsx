@@ -19,6 +19,15 @@ const DashboardNavbar = ({ toggleSidebar }) => {
             return res.data;
         },
     });
+    const { data: notifications = [] } = useQuery({
+        queryKey: ["notifications"],
+        queryFn: async () => {
+            const res = await axiosSecure.get(`/notifications?email=${firebaseUser.email}`);
+            return res.data;
+        },
+    });
+
+    console.log(notifications)
 
     const totalAvailableCoins = users.reduce((total, user) => {
         return total + Number(user.availableCoin || 0); // Convert availableCoin to a number
@@ -42,35 +51,33 @@ const DashboardNavbar = ({ toggleSidebar }) => {
                     <a className="bg-[#FFF4E6] text-text-primary py-2.5 px-4 rounded-full">
                         $ {user.role === 'admin' ? totalAvailableCoins : user.availableCoin} Coin
                     </a>
-                    <div className="dropdown dropdown-end">
-                        <div tabIndex={0}>
-                            <FaRegBell className="text-2xl cursor-pointer" />
-                        </div>
-                        <div
-                            tabIndex={0}
-                            className="menu menu-sm mt-7 dropdown-content bg-base-200 rounded-lg z-[1] w-80 p-3 flex flex-col gap-3 shadow max-h-80 overflow-y-auto">
-                            <div className="bg-white p-4 rounded-lg w-full shadow">
-                                <h1 className="text-lg text-text-primary">Lorem ipsum dolor sit amet.</h1>
-                                <p className="text-text-secondary">20-Jan-2025</p>
+                    {
+                        user.role === 'worker' && <div className="dropdown dropdown-end">
+                            <div tabIndex={0} className="indicator">
+                                <FaRegBell className="text-2xl cursor-pointer" />
+                                {
+                                    notifications.length > 0 ? <span className="badge badge-xs bg-error-red indicator-item"></span> : ""
+                                }
                             </div>
-                            <div className="bg-white p-4 rounded-lg w-full shadow-lg">
-                                <h1 className="text-lg text-text-primary">Lorem ipsum dolor sit amet.</h1>
-                                <p className="text-text-secondary">20-Jan-2025</p>
-                            </div>
-                            <div className="bg-white p-4 rounded-lg w-full shadow-lg">
-                                <h1 className="text-lg text-text-primary">Lorem ipsum dolor sit amet.</h1>
-                                <p className="text-text-secondary">20-Jan-2025</p>
-                            </div>
-                            <div className="bg-white p-4 rounded-lg w-full shadow-lg">
-                                <h1 className="text-lg text-text-primary">Lorem ipsum dolor sit amet.</h1>
-                                <p className="text-text-secondary">20-Jan-2025</p>
-                            </div>
-                            <div className="bg-white p-4 rounded-lg w-full shadow-lg">
-                                <h1 className="text-lg text-text-primary">Lorem ipsum dolor sit amet.</h1>
-                                <p className="text-text-secondary">20-Jan-2025</p>
+                            <div
+                                tabIndex={0}
+                                className="menu menu-sm mt-7 dropdown-content bg-base-200 rounded-lg z-[1] w-[450px] p-3 flex flex-col gap-3 shadow h-[500px] overflow-y-auto">
+                                {
+                                    notifications.map(notification => <div key={notification._id} className="bg-white p-4 rounded-lg w-full shadow">
+                                        <h1 className="text-lg text-text-primary">{notification.message}</h1>
+                                        <p className="text-text-secondary">{new Date(notification.time).toLocaleString("en-US", {
+                                            weekday: "short",
+                                            month: "short",
+                                            day: "numeric",
+                                            year: "numeric",
+                                            hour: "2-digit",
+                                            minute: "2-digit",
+                                        })}</p>
+                                    </div>)
+                                }
                             </div>
                         </div>
-                    </div>
+                    }
 
                     <div className="dropdown dropdown-end">
                         <div tabIndex={0} role="button" className="btn btn-ghost btn-circle avatar">

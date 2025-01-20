@@ -67,11 +67,17 @@ const BuyerHome = () => {
   };
 
   const { mutate: approveSubmission } = useMutation({
-    mutationFn: async (submissionId) => {
-      const res = await axiosSecure.patch(`/submissions/${submissionId}`, { action: "approved" });
+    mutationFn: async (submission) => {
+      const res = await axiosSecure.patch(`/submissions/${submission._id}`, { action: "approved" })
+      // Post a notification
+      await axiosSecure.post("/notifications", {
+        message: `You have earned ${submission.payable_amount} from ${submission.buyer_email} for completing ${submission.task_title}`,
+        toEmail: submission.worker_email,
+        time: new Date(),
+      });
       return res.data;
     },
-    onSuccess: () => {
+    onSuccess: async () => {
       queryClient.invalidateQueries({ queryKey: ["submission", userEmail] });
       Swal.fire("Approved!", "The submission has been approved.", "success");
     },
@@ -80,9 +86,16 @@ const BuyerHome = () => {
     },
   });
 
+
   const { mutate: rejectSubmission } = useMutation({
-    mutationFn: async (submissionId) => {
-      const res = await axiosSecure.patch(`/submissions/${submissionId}`, { action: "reject" });
+    mutationFn: async (submission) => {
+      const res = await axiosSecure.patch(`/submissions/${submission._id}`, { action: "reject" });
+      // Post a notification
+      await axiosSecure.post("/notifications", {
+        message: `Your submission request has been rejected by ${submission.buyer_email} for not completing ${submission.task_title}`,
+        toEmail: submission.worker_email,
+        time: new Date(),
+      });
       return res.data;
     },
     onSuccess: () => {
@@ -95,7 +108,7 @@ const BuyerHome = () => {
     },
   });
 
-  const handleApprove = (submissionId) => {
+  const handleApprove = (submission) => {
     Swal.fire({
       title: "Are you sure?",
       text: "You are about to approve this submission.",
@@ -106,12 +119,12 @@ const BuyerHome = () => {
       confirmButtonText: "Yes, approve it!",
     }).then((result) => {
       if (result.isConfirmed) {
-        approveSubmission(submissionId);
+        approveSubmission(submission);
       }
     });
   };
 
-  const handleReject = (submissionId) => {
+  const handleReject = (submission) => {
     Swal.fire({
       title: "Are you sure?",
       text: "You are about to reject this submission.",
@@ -122,7 +135,7 @@ const BuyerHome = () => {
       confirmButtonText: "Yes, reject it!",
     }).then((result) => {
       if (result.isConfirmed) {
-        rejectSubmission(submissionId);
+        rejectSubmission(submission);
       }
     });
   };
@@ -130,8 +143,8 @@ const BuyerHome = () => {
   return (
     <div>
       <Helmet>
-              <title>Dashboard | Buyer Home - TaskHive</title>
-            </Helmet>
+        <title>Dashboard | Buyer Home - TaskHive</title>
+      </Helmet>
       <h1 className="text-2xl font-bold mb-4">Worker Dashboard</h1>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         <div className="bg-white p-4 shadow rounded text-center">
@@ -173,13 +186,13 @@ const BuyerHome = () => {
                 <td className="px-4 py-2">
                   <div className="flex gap-2 items-center">
                     <button
-                      onClick={() => handleApprove(submission._id)}
+                      onClick={() => handleApprove(submission)}
                       className="px-4 py-2 bg-green-500 text-white rounded-lg"
                     >
                       Accept
                     </button>
                     <button
-                      onClick={() => handleReject(submission._id)}
+                      onClick={() => handleReject(submission)}
                       className="px-4 py-2 bg-red-500 text-white rounded-lg"
                     >
                       Reject
