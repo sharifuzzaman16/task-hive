@@ -46,7 +46,7 @@ const Navbar = () => {
                                 </div>
                                 <ul
                                     tabIndex={0}
-                                    className="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow">
+                                    className="menu menu-sm dropdown-content bg-base-200 rounded-box z-[1] mt-3 w-52 p-2 shadow">
                                     {user.role === 'admin' && <li><Link to={'/dashboard/admin-home'}>Dashboard</Link></li>}
                                     {user.role === 'worker' && <li><Link to={'/dashboard/worker-home'}>Dashboard</Link></li>}
                                     {user.role === 'buyer' && <li><Link to={'/dashboard/buyer-home'}>Dashboard</Link></li>}
