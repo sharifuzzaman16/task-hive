@@ -47,10 +47,10 @@ const Navbar = () => {
                                 <ul
                                     tabIndex={0}
                                     className="menu menu-sm dropdown-content bg-base-200 rounded-box z-[1] mt-3 w-52 p-2 shadow">
+                                    <li><Link to={'/dashboard/profile'}>Profile</Link></li>
                                     {user.role === 'admin' && <li><Link to={'/dashboard/admin-home'}>Dashboard</Link></li>}
                                     {user.role === 'worker' && <li><Link to={'/dashboard/worker-home'}>Dashboard</Link></li>}
                                     {user.role === 'buyer' && <li><Link to={'/dashboard/buyer-home'}>Dashboard</Link></li>}
-                                    <li><a>Settings</a></li>
                                     <li><a onClick={logOut}>Logout</a></li>
                                 </ul>
                             </div>

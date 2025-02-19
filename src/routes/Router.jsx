@@ -23,6 +23,7 @@ import Unauthorized from "../components/Unauthorized";
 import AdminRoute from "./AdminRoute";
 import BuyerRoute from "./BuyerRoute";
 import WorkerRoute from "./WorkerRoute"
+import Profile from "../pages/Dashboard/Common/Profile/Profile";
 
 
 const router = createBrowserRouter([
@@ -48,6 +49,10 @@ const router = createBrowserRouter([
     path: "/dashboard",
     element: <PrivateRoute><DashboardLayout></DashboardLayout></PrivateRoute>,
     children: [
+      {
+        path: "/dashboard/profile",
+        element: <Profile></Profile>
+      },
       {
         path: "/dashboard/worker-home",
         element: <WorkerRoute><WorkerHome></WorkerHome></WorkerRoute>
