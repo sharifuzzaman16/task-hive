@@ -1,102 +1,79 @@
 import React, { useContext } from "react";
 import { AuthContext } from "../../../../context/AuthProvider";
 import { useQuery } from "@tanstack/react-query";
-import useAxiosSecure from "../../../../hooks/useAxiosSecure";
 import { Helmet } from "react-helmet-async";
-import { FaUserCircle, FaChartLine, FaTasks } from "react-icons/fa";
+import { FaTasks, FaClock, FaDollarSign } from "react-icons/fa";
+import useAxiosSecure from "../../../../hooks/useAxiosSecure";
 
 const WorkerHome = () => {
-  const { user } = useContext(AuthContext);
   const axiosSecure = useAxiosSecure();
+  const { user } = useContext(AuthContext);
   const userEmail = user?.email;
 
-  const { data: submissions = [] } = useQuery({
-    queryKey: ['submission', userEmail],
-    queryFn: async () => {
-      const res = await axiosSecure.get(`/submissions?email=${userEmail}`);
-      return res.data;
-    },
+  const { data: availableTasks = [] } = useQuery({
+    queryKey: ["availableTasks"],
+    queryFn: async () => (await axiosSecure.get(`/available-tasks`)).data,
+  });
+
+  const { data: mySubmissions = [] } = useQuery({
+    queryKey: ["mySubmissions", userEmail],
+    queryFn: async () => (await axiosSecure.get(`/my-submissions?email=${userEmail}`)).data,
     enabled: !!userEmail,
   });
 
-  const approvedSubmissions = submissions.filter((submission) => submission.status === 'approved');
-  const pendingSubmissions = submissions.filter((submission) => submission.status === 'pending').length;
-  const totalEarnings = approvedSubmissions.reduce((sum, submission) => sum + (submission.payable_amount || 0), 0);
+  const { data: earnings = [] } = useQuery({
+    queryKey: ["earnings", userEmail],
+    queryFn: async () => (await axiosSecure.get(`/earnings?email=${userEmail}`)).data,
+    enabled: !!userEmail,
+  });
+
+  const pendingSubmissions = mySubmissions.filter(sub => sub.status === "pending");
+  const totalEarnings = earnings.reduce((sum, earning) => sum + (earning.amount || 0), 0);
 
   return (
-    <div className="p-6 bg-gray-50 min-h-screen">
+    <div className="p-6 space-y-6">
       <Helmet>
         <title>Dashboard | Worker Home - TaskHive</title>
       </Helmet>
-
-      {/* Welcome Section */}
-      <div className="bg-white p-6 rounded-lg shadow-md border border-gray-200 flex items-center mb-8">
-        <div>
-          <h1 className="text-2xl font-bold text-gray-800">
-            Welcome back, {user?.displayName || "Worker"}!
-          </h1>
-          <p className="text-gray-600 mt-1">
-            Here’s an overview of your recent activity.
-          </p>
-        </div>
+      <h1 className="text-3xl font-bold">Welcome, {user?.displayName || "Worker"}!</h1>
+      <p className="text-lg text-gray-600">Find tasks, track submissions, and monitor your earnings.</p>
+      
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        {[
+          { label: "Available Tasks", value: availableTasks.length, color: "bg-blue-100 text-blue-600", icon: <FaTasks size={30} /> },
+          { label: "Pending Submissions", value: pendingSubmissions.length, color: "bg-yellow-100 text-yellow-600", icon: <FaClock size={30} /> },
+          { label: "Total Earnings", value: `$${totalEarnings}`, color: "bg-green-100 text-green-600", icon: <FaDollarSign size={30} /> },
+        ].map(({ label, value, color, icon }) => (
+          <div key={label} className={`p-6 rounded-lg shadow-md text-center ${color}`}>
+            <div className="flex justify-center mb-2">{icon}</div>
+            <h2 className="text-xl font-semibold">{label}</h2>
+            <p className="text-3xl font-bold">{value}</p>
+          </div>
+        ))}
       </div>
-
-      {/* Stats Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
-        <div className="bg-white p-6 rounded-lg shadow-md flex items-center gap-4 hover:shadow-lg transition-shadow duration-300">
-          <FaTasks className="text-4xl text-blue-600" />
-          <div>
-            <h2 className="text-lg font-semibold text-gray-700">Total Submissions</h2>
-            <p className="text-4xl font-bold text-blue-600 mt-1">{submissions.length}</p>
-          </div>
-        </div>
-        <div className="bg-white p-6 rounded-lg shadow-md flex items-center gap-4 hover:shadow-lg transition-shadow duration-300">
-          <FaChartLine className="text-4xl text-yellow-600" />
-          <div>
-            <h2 className="text-lg font-semibold text-gray-700">Pending Submissions</h2>
-            <p className="text-4xl font-bold text-yellow-600 mt-1">{pendingSubmissions}</p>
-          </div>
-        </div>
-        <div className="bg-white p-6 rounded-lg shadow-md flex items-center gap-4 hover:shadow-lg transition-shadow duration-300">
-          <FaChartLine className="text-4xl text-green-600" />
-          <div>
-            <h2 className="text-lg font-semibold text-gray-700">Total Earnings</h2>
-            <p className="text-4xl font-bold text-green-600 mt-1">${totalEarnings}</p>
-          </div>
-        </div>
-      </div>
-
-      {/* Submissions Table */}
-      <div className="bg-white rounded-lg shadow-md overflow-hidden">
-        <table className="min-w-full">
-          <thead className="bg-gray-100">
-            <tr>
-              <th className="text-left px-6 py-4 text-sm font-medium text-gray-700 uppercase">Task</th>
-              <th className="text-left px-6 py-4 text-sm font-medium text-gray-700 uppercase">Buyer Email</th>
-              <th className="text-left px-6 py-4 text-sm font-medium text-gray-700 uppercase">Payable Amount</th>
-              <th className="text-left px-6 py-4 text-sm font-medium text-gray-700 uppercase">Status</th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-gray-200">
-            {submissions.map((submission) => (
-              <tr key={submission._id} className="hover:bg-gray-50 transition-colors duration-200">
-                <td className="px-6 py-4 text-sm text-gray-800">{submission.task_title}</td>
-                <td className="px-6 py-4 text-sm text-gray-800">{submission.buyer_name}</td>
-                <td className="px-6 py-4 text-sm text-gray-800">$ {submission.payable_amount}</td>
-                <td className="px-6 py-4">
-                  <span
-                    className={`inline-flex px-3 py-1 text-sm font-semibold rounded-full ${submission.status === "approved"
-                        ? "bg-green-100 text-green-800"
-                        : "bg-yellow-100 text-yellow-800"
-                      }`}
-                  >
-                    {submission.status}
-                  </span>
-                </td>
+      
+      <div className="bg-white p-6 shadow-md rounded-lg">
+        <h2 className="text-2xl font-semibold mb-4">Pending Submissions</h2>
+        <div className="overflow-x-auto">
+          <table className="w-full border-collapse border rounded-lg">
+            <thead>
+              <tr className="bg-gray-200 text-gray-700">
+                {['Task', 'Status', 'Amount'].map(header => (
+                  <th key={header} className="px-4 py-2 text-left">{header}</th>
+                ))}
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {pendingSubmissions.map(submission => (
+                <tr key={submission._id} className="border-t hover:bg-gray-100">
+                  <td className="px-4 py-2">{submission.task_title}</td>
+                  <td className="px-4 py-2">{submission.status}</td>
+                  <td className="px-4 py-2">${submission.payable_amount}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   );
